@@ -4,8 +4,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="lib" path="commons-codec-1.8.jar"/>
 	<classpathentry kind="lib" path="mysql-connector-java-5.1.28-bin.jar"/>
-	<classpathentry kind="lib" path="postgresql-9.4-1202.jdbc42.jar"/>
 	<classpathentry kind="lib" path="sqlite-jdbc-3.7.2.jar"/>
 	<classpathentry kind="src" path="src_old"/>
+	<classpathentry kind="lib" path="postgresql-9.4.1208.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
