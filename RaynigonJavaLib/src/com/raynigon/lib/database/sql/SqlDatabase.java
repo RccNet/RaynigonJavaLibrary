@@ -51,7 +51,7 @@ public abstract class SqlDatabase{
 		String type = settings.getProperty("type", "sqllite").toLowerCase();
 		if(type.equalsIgnoreCase("sqllite")){
 			File path = new File(settings.getProperty("path", "sql_lite_db.slite").toLowerCase());
-			SqlLiteDatabase litedb = new SqlLiteDatabase();
+			SQLiteDatabase litedb = new SQLiteDatabase();
 			litedb.openDatabase(path);
 			return litedb;
 		}else if(type.equalsIgnoreCase("mysql")){

@@ -12,7 +12,7 @@ import org.sqlite.JDBC;
  * The SqlLiteDatabase is an implementation of the SqlLite Java Database Connector (JDBC)
  * @author Simon Schneider
  */
-public class SqlLiteDatabase extends SqlDatabase {
+public class SQLiteDatabase extends SqlDatabase {
 	
 	private File f = null;
 	
@@ -23,7 +23,7 @@ public class SqlLiteDatabase extends SqlDatabase {
 	public void openDatabase(File tf) throws SQLException{
 		f = tf;
 		new JDBC();
-		conn = DriverManager.getConnection("jdbc:sqllite:"+f.getAbsolutePath());
+		conn = DriverManager.getConnection("jdbc:sqlite:"+f.getAbsolutePath());
 		connectionStatus = true;
 		logInfo("SQLLite Database is ready");
 	}
