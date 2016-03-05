@@ -43,6 +43,5 @@ public class SQLiteDatabase extends SqlDatabase {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY HH:mm:ss");
 		logInfo("SQLLite Database File was modified: "+sdf.format(new Date(f.lastModified())));
 	}
-
 	
 }

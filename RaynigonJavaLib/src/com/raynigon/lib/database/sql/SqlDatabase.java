@@ -9,11 +9,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.w3c.dom.Document;
+
+import com.raynigon.lib.database.utils.DatabaseBulkWriter;
+import com.raynigon.lib.json.JSONArray;
 
 
 /**Generated on 09.09.2015 by Simon Schneider in Project <b>RaynigonJavaLib</b><p>
  * This is an abstraction of an SqlDatabase, it can be used to connect to different databases without changing source code
  * @author Simon Schneider
+ */
+/**
+ * @author Simon Schneider
+ *
+ */
+/**
+ * @author Simon Schneider
+ *
  */
 public abstract class SqlDatabase{
 	
@@ -44,6 +59,7 @@ public abstract class SqlDatabase{
 	 * @throws SQLException			thrown if an error occurs during the creation of a Database
 	 * @throws UnknownHostException		thrown if a mysql/postgresql hostname was unable to find
 	 */
+	//TODO refactor this Method its ugly
 	public static SqlDatabase createFromProperties(Properties settings) throws SQLException, UnknownHostException{
 		if(settings==null){
 			throw new NullPointerException("Properties object is null");
@@ -80,6 +96,11 @@ public abstract class SqlDatabase{
 	/**The Connection which is made by the subclass
 	 */
 	protected Connection conn = null;
+
+	
+	/** The Logger for the Database
+	 */
+	protected Logger log;
 	
 	
 	/** This Method executes a query
@@ -188,9 +209,14 @@ public abstract class SqlDatabase{
 
 	/**Logs a Info Message to Console
 	 * @param message	the message which should be logged
+	 * @deprecated Just use the inherited log attribute
 	 */
+	@Deprecated
 	protected void logInfo(String message) {
-		System.out.println("[Info]:"+message);
+		if(log==null)
+			System.out.println("[Info]:"+message);
+		else
+			log.log(Level.INFO, "SqlDatabase", message);
 	}
 	
 	/**Logs an Exception to Console
@@ -200,4 +226,22 @@ public abstract class SqlDatabase{
 		exception.printStackTrace(System.err);
 	}
 	
+	
+	/** Writes a Bulk of Data into the Database
+	 * @param root				An XML Document containing the Data for the Bulk Insert
+	 * @throws SQLException		thrown if an error occurs during the Bulk Insert
+	 */
+	//TODO add Format Specifiers in the JavaDoc
+	public void writeDataBulk(Document root) throws SQLException{
+		DatabaseBulkWriter.writeData(this, root);
+	}
+	
+	/** Writes a Bulk of Data into the Database
+	 * @param tables	an Array of JSON Objects representing a DB Table
+	 * @throws SQLException		thrown if an error occurs during the Bulk Insert
+	 */
+	//TODO add Format Specifiers in the JavaDoc
+	public void writeDataBulk(JSONArray tables) throws SQLException{
+		DatabaseBulkWriter.writeData(this, tables);
+	}
 }
