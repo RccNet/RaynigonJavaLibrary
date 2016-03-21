@@ -93,6 +93,7 @@ public class EventManager {
 			}
 		}
 		EventMethod[] evms = new EventMethod[ev_methods.size()];
+		evms = ev_methods.toArray(evms);
 		method_map.put(inEventListener, evms);
 	}
 	

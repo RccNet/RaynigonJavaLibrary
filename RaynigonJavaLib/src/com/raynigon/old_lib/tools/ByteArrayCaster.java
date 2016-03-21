@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 
 public class ByteArrayCaster {
 
+	@Deprecated
 	public static long getLongFromBytes(byte[] array){
 		if(array.length!=8){
 			throw new IllegalArgumentException("Array isnt 8 bytes long");
@@ -16,6 +17,7 @@ public class ByteArrayCaster {
 		return retvar;
 	}
 	
+	@Deprecated
 	public static int getIntFromBytes(byte[] array){
 		if(array.length!=4){
 			throw new IllegalArgumentException("Array isnt 4 bytes long");
@@ -28,6 +30,7 @@ public class ByteArrayCaster {
 		return retvar;
 	}
 	
+	@Deprecated
 	public static short getShortFromBytes(byte[] array) {
 		if(array.length!=2){
 			throw new IllegalArgumentException("Array isnt 2 bytes long");
@@ -40,6 +43,7 @@ public class ByteArrayCaster {
 		return retvar;
 	}
 	
+	@Deprecated
 	public static float getFloatFromBytes(byte[] array) {
 		if(array.length!=4){
 			throw new IllegalArgumentException("Array isnt 2 bytes long");
@@ -52,6 +56,7 @@ public class ByteArrayCaster {
 		return retvar;
 	}
 	
+	@Deprecated
 	public static double getDoubleFromBytes(byte[] array) {
 		if(array.length!=8){
 			throw new IllegalArgumentException("Array isnt 2 bytes long");
@@ -64,6 +69,7 @@ public class ByteArrayCaster {
 		return retvar;
 	}
 	
+	@Deprecated
 	public static byte[] getBytesForInt(int counter){
 		byte[] length = new byte[4];
 		ByteBuffer bbufint = ByteBuffer.allocate(4);
@@ -74,6 +80,7 @@ public class ByteArrayCaster {
 		return length;
 	}
 	
+	@Deprecated
 	public static byte[] getBytesForLong(long counter){
 		byte[] length = new byte[8];
 		ByteBuffer bbufLong = ByteBuffer.allocate(8);
@@ -84,6 +91,7 @@ public class ByteArrayCaster {
 		return length;
 	}
 	
+	@Deprecated
 	public static byte[] getBytesForShort(short counter){
 		byte[] length = new byte[2];
 		ByteBuffer bbufLong = ByteBuffer.allocate(2);
@@ -94,6 +102,7 @@ public class ByteArrayCaster {
 		return length;
 	}
 	
+	@Deprecated
 	public static byte[] getBytesForFloat(float counter){
 		byte[] length = new byte[4];
 		ByteBuffer bbufLong = ByteBuffer.allocate(4);
@@ -104,6 +113,7 @@ public class ByteArrayCaster {
 		return length;
 	}
 	
+	@Deprecated
 	public static byte[] getBytesForDouble(double counter){
 		byte[] length = new byte[8];
 		ByteBuffer bbufLong = ByteBuffer.allocate(8);
@@ -114,6 +124,7 @@ public class ByteArrayCaster {
 		return length;
 	}
 	
+	@Deprecated
 	public static String madeByteString(byte[] array){
 		String result = "";
 		for(byte b : array){
@@ -123,6 +134,7 @@ public class ByteArrayCaster {
 		return result;
 	}
 	
+	@Deprecated
 	public static byte[] madeByteArrayFromByteString(String byte_string){
 		String[] splits = byte_string.split(";");
 		byte[] bytes = new byte[splits.length];

@@ -53,6 +53,7 @@ public abstract class SqlDatabase{
 	 * <tr><td>password = my_pwd</td><td>the password for the user, named above</td></tr>
 	 * <tr><td>database = my_db</td><td>the name of the Database which should be used</td></tr>
 	 * <tr><td>port = 12345</td><td>the port of the mysql/postgresql server (this is optional)</td></tr>
+	 * <tr><td>logger = DatabaseLogger</td><td>the name of the logger on which should be logged, null is default (this is optional)</td></tr>
 	 * </table>
 	 * @param settings		The Properties Object from which the data should be read
 	 * @return	an {@link SqlDatabase} according to the informations given by the Properties Object
@@ -64,10 +65,15 @@ public abstract class SqlDatabase{
 		if(settings==null){
 			throw new NullPointerException("Properties object is null");
 		}
+		String loggerName = settings.getProperty("logger", "null");
+		Logger logger = null;
+		if(!loggerName.equalsIgnoreCase("null"))
+			logger = Logger.getLogger(loggerName);
 		String type = settings.getProperty("type", "sqllite").toLowerCase();
 		if(type.equalsIgnoreCase("sqllite")){
 			File path = new File(settings.getProperty("path", "sql_lite_db.slite").toLowerCase());
 			SQLiteDatabase litedb = new SQLiteDatabase();
+			litedb.setLogger(logger);
 			litedb.openDatabase(path);
 			return litedb;
 		}else if(type.equalsIgnoreCase("mysql")){
@@ -78,6 +84,7 @@ public abstract class SqlDatabase{
 			String db_name = settings.getProperty("database", "my_database");
 			int port = Integer.parseInt(settings.getProperty("port", "3306")); 
 			MySqlDatabase mydb = new MySqlDatabase();
+			mydb.setLogger(logger);
 			mydb.connect(inetaddr, db_name, username, password, port);
 			return mydb;
 		}else if(type.equalsIgnoreCase("postgresql")){
@@ -243,5 +250,12 @@ public abstract class SqlDatabase{
 	//TODO add Format Specifiers in the JavaDoc
 	public void writeDataBulk(JSONArray tables) throws SQLException{
 		DatabaseBulkWriter.writeData(this, tables);
+	}
+	
+	/**Sets the Logger for this Database Interface, in default no logger will be used and everything will be send to the Standard Output Stream
+	 * @param inLogger			The Logger on which will be logged, null if no logger should be used
+	 */
+	public void setLogger(Logger inLogger){
+		log = inLogger;
 	}
 }
