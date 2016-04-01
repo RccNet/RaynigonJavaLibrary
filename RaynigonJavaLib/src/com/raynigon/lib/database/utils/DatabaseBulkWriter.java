@@ -126,12 +126,12 @@ public class DatabaseBulkWriter {
 
 	static class Table{
 		public String name;
-		public List<DataSet> dataSets;
+		public List<DataSet> dataSets = new ArrayList<>();
 		public Table(String inName) {name = inName;}
 	}
 	
 	static class DataSet{
-		public List<Pair> fields;
+		public List<Pair> fields = new ArrayList<Pair>();
 	}
 	
 	static class Pair{
