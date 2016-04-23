@@ -17,4 +17,9 @@ Compatibly to Java: **1.7.0**
  - 0.0.6: September 2016
   - [ ] ZIP Compression (Full Support)
 
-
+##Versions
+### Version 0.0.1
+### Version 0.0.2
+### Version 0.0.3
+### Version 0.0.4
+### Version 0.0.5
