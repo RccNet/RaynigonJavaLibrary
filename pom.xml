@@ -56,6 +56,20 @@
 		<artifactId>commons-codec</artifactId>
 		<version>1.10</version>
 	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<scope>test</scope>
+  	</dependency>
   </dependencies>
   <url>http://raynigon.com/maven/RaynigonJavaLib</url>
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>junit</groupId>
+  			<artifactId>junit</artifactId>
+  			<version>4.12</version>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
 </project>
