@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import com.raynigon.lib.io.IOUtils;
 
-public class IOUtilsTest {
+public class TestIOUtils {
 
 	private byte[] data_byte;
 	private String data_text;
