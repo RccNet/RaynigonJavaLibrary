@@ -58,4 +58,7 @@
 	</dependency>
   </dependencies>
   <url>http://raynigon.com/maven/RaynigonJavaLib</url>
+  <scm>
+  	<url>https://github.com/RccNet/RaynigonJavaLibrary.git</url>
+  </scm>
 </project>

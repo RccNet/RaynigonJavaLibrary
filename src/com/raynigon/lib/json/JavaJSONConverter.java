@@ -107,7 +107,7 @@ public class JavaJSONConverter {
 	}
 	
 	private static String getFieldName(Field f) {
-		JsonFieldAttribute attr = f.getDeclaredAnnotation(JsonFieldAttribute.class);
+		JsonFieldAttribute attr = f.getAnnotation(JsonFieldAttribute.class);
 		if(attr==null || attr.Name().equalsIgnoreCase(""))
 			return f.getName();
 		
