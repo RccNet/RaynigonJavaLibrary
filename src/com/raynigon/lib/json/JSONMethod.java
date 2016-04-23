@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface JsonMethodAttribute {
+public @interface JSONMethod {
 
 	public static final int FUNCTION_GET = 0;
 	public static final int FUNCTION_SET = 1;
 	
-	public String Name() default "";
+	public String Name();
 	public int Function() default FUNCTION_GET;
 }

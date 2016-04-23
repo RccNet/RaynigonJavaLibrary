@@ -5,25 +5,215 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.raynigon.lib.annotations.Future;
 
 /**Generated on 28.11.2015 by Simon Schneider in Project <b>RaynigonJavaLib</b><p>
  * @author Simon Schneider
  */
 public class JavaJSONConverter {
 
-	/*
-	 *
-	 * 
-	 * 				JAVA TO JSON
-	 * 
-	 * 
-	 * 
+	
+	private static JSONObject compMapperFJO(Object inO){
+		try {
+			return fromJava(inO);
+		} catch (IOException e) {
+			throw new JSONParseException("compatibility Exception",e);
+		}
+	}
+	
+	private static JSONArray compMapperFJA(Object[] inA){
+		try {
+			return fromJava(inA, inA.getClass().getComponentType());
+		} catch (IOException e) {
+			throw new JSONParseException("compatibility Exception",e);
+		}
+	}
+	
+	private static Object compMapperFJO(JSONObject inO, Class<?> clazz){
+		try {
+			return fromJson(inO, clazz);
+		} catch (IOException e) {
+			throw new JSONParseException("compatibility Exception",e);
+		}
+	}
+	
+	private static List<?> compMapperFJA(JSONArray inO, Class<?> clazz){
+		try {
+			return Arrays.asList(fromJson(inO, clazz));
+		} catch (IOException e) {
+			throw new JSONParseException("compatibility Exception",e);
+		}
+	}
+	
+	
+	@Future(Version="0.0.5")
+	public static JSONObject 	fromJavaObject(Object inObject){return compMapperFJO(inObject);}
+	@Future(Version="0.0.5")
+	public static JSONArray 	fromJavaArray(Object[] inArray){return compMapperFJA(inArray);}
+	
+	@Future(Version="0.0.5")
+	public static Object		fromJSONObject(JSONObject inObject, Class<?> inClazz){return compMapperFJO(inObject, inClazz);}
+	@Future(Version="0.0.5")
+	public static List<?> fromJSONArray(JSONArray inArray, Class<?> inClazz){return compMapperFJA(inArray, inClazz);}
+	
+	protected static String getNameFromField(Field inField){return null;}
+	protected static String getNameFromMethod(Method inMethod){return null;}
+	
+	protected static boolean isAffected(Field inField){
+		JSONAttribute ja = inField.getAnnotation(JSONAttribute.class);
+		return ja==null ? true : ja.Affect();
+	}
+	
+	protected static boolean isAffected(Method inMethod){
+		return inMethod.isAnnotationPresent(JSONMethod.class);
+	}
+	
+	protected static void addFieldsToValueMap(Field[] fields, Object obj, Map<String, AttributeValue> map){
+		for(Field field : fields){
+			if(Modifier.isStatic(field.getModifiers()))
+				continue;
+			if(!isAffected(field))
+				continue;
+			String name = getNameFromField(field);
+			map.put(name, new AttributeValue(name, obj, field));
+		}
+	}
+	
+	protected static void addMethodsToValueMap(Method[] methods, Object obj, Map<String, AttributeValue> map){
+		for(Method method : methods){
+			if(Modifier.isStatic(method.getModifiers()))
+				continue;
+			if(!isAffected(method))
+				continue;
+			String name = getNameFromMethod(method);
+			if(!method.getReturnType().equals(Void.TYPE) && method.getParameterTypes().length==0)
+				addMethodToValueMap(map, name, obj, method, AttributeValue.TYPE_METHOD_GET);
+			else if(method.getReturnType().equals(Void.TYPE) && method.getParameterTypes().length==1)
+				addMethodToValueMap(map, name, obj, method, AttributeValue.TYPE_METHOD_SET);	
+		}
+	}
+	
+	protected static void addMethodToValueMap(Map<String, AttributeValue> inMap, String name, Object obj, Method method, int inType) {
+		if(inMap.containsKey(name))
+			inMap.get(name).addMethod(method, inType);
+		else
+			inMap.put(name, new AttributeValue(name, obj, method, inType));
+	}
+
+	protected static Map<String, AttributeValue> findAttributeValues(Object obj){
+		Class<?> clazz = obj.getClass();
+		Map<String, AttributeValue> attrValues = new HashMap<>();
+
+		addFieldsToValueMap(clazz.getDeclaredFields(), obj, attrValues);
+		addMethodsToValueMap(clazz.getDeclaredMethods(), obj, attrValues);
+		return attrValues;
+	}
+	
+	protected static class AttributeValue{
+		public static final int TYPE_FIELD = 0x100;
+		public static final int TYPE_METHOD = 0x200;
+		public static final int TYPE_METHOD_GET = 0x210;
+		public static final int TYPE_METHOD_SET = 0x211;
+		
+		private int type = 0;
+		private String name;
+		private Method get_method;
+		private Method set_method;
+		private Field field;
+		private Object obj;
+		
+		public AttributeValue(String inName, Object inObj, Field inField) {
+			type 	= TYPE_FIELD;
+			name 	= inName;
+			obj 	= inObj;
+			field 	= inField;
+		}
+		
+		public AttributeValue(String inName, Object inObj, Method inMethod, int inType) {
+			type 	= TYPE_METHOD;
+			name 	= inName;
+			obj 	= inObj;
+			if(inType==TYPE_METHOD_GET)
+				get_method 	= inMethod;
+			else
+				set_method = inMethod;
+		}
+
+		public void addMethod(Method inMethod, int inType){
+			if(inType==TYPE_METHOD_GET)
+				get_method = inMethod;
+			else
+				set_method = inMethod;
+		}
+		
+		public int getType() {
+			return type;
+		}
+		
+		public Object getValue(){
+			try{
+				if(type==TYPE_FIELD){
+					boolean access = field.isAccessible();
+					Object value;
+					field.setAccessible(true);
+					value = field.get(obj);
+					field.setAccessible(access);
+					return value;
+				}else if(type==TYPE_METHOD && get_method!=null){
+					boolean access = get_method.isAccessible();
+					Object value;
+					get_method.setAccessible(true);
+					value = get_method.invoke(obj);
+					get_method.setAccessible(access);
+					return value;
+				}
+			}catch(IllegalArgumentException | IllegalAccessException | InvocationTargetException e){
+				throw new JSONParseException("Error during pulling value from "+name, e);
+			}
+			return null;
+		}
+		
+		public void setValue(Object value){
+			try{
+				if(type==TYPE_FIELD){
+					boolean access = field.isAccessible();
+					field.setAccessible(true);
+					field.set(obj, value);
+					field.setAccessible(access);
+				}else if(type==TYPE_METHOD && set_method!=null){
+					boolean access = set_method.isAccessible();
+					set_method.setAccessible(true);
+					set_method.invoke(obj, value);
+					set_method.setAccessible(access);
+				}
+			}catch(IllegalArgumentException | IllegalAccessException | InvocationTargetException e){
+				throw new JSONParseException("Error during pushing value into "+name, e);
+			}
+		}
+	}
+	
+	
+	
+	
+	/*#####################################################################
+	 *#####################################################################
+	 *#####################################################################
+	 * 				JAVA TO JSON   -   DEPRECATED
+	 *##################################################################### 
+	 *##################################################################### 
+	 *##################################################################### 
 	 */
 	
+	@Deprecated
 	public static JSONArray fromJava(Object obj, Class<?> arrayType) throws IOException{
 		JSONArray array = new JSONArray();
 		Object[] arr = (Object[]) obj;
@@ -40,6 +230,7 @@ public class JavaJSONConverter {
 		return array;
 	}
 	
+	@Deprecated
 	public static JSONObject fromJava(Object obj) throws IOException{
 		if(obj==null)
 			return null;
@@ -67,7 +258,7 @@ public class JavaJSONConverter {
 		}
 		
 		for(Method m : clazz.getMethods()){
-			JsonMethodAttribute jma = m.getAnnotation(JsonMethodAttribute.class);
+			JSONMethod jma = m.getAnnotation(JSONMethod.class);
 			if(jma==null)
 				continue;
 			Class<?> type = m.getReturnType();
@@ -84,6 +275,7 @@ public class JavaJSONConverter {
 		return jsonobj;
 	}
 	
+	@Deprecated
 	private static Object getValue(Method m, Object obj) throws IOException {
 		try {
 			return m.invoke(obj);
@@ -96,6 +288,7 @@ public class JavaJSONConverter {
 		}
 	}
 
+	@Deprecated
 	private static Object getValue(Field f, Object o) throws IOException{
 		try{
 			return f.get(o);
@@ -106,24 +299,14 @@ public class JavaJSONConverter {
 		}
 	}
 	
+	@Deprecated
 	private static String getFieldName(Field f) {
-		JsonFieldAttribute attr = f.getAnnotation(JsonFieldAttribute.class);
+		JSONAttribute attr = f.getAnnotation(JSONAttribute.class);
 		if(attr==null || attr.Name().equalsIgnoreCase(""))
 			return f.getName();
 		
 		return attr.Name();
 	}
-
-	private static boolean isAffected(Field f) {
-		JsonFieldAttribute attr = f.getAnnotation(JsonFieldAttribute.class);
-		if(attr==null)
-			return true;
-		
-		return attr.Affect();
-	}
-	
-	
-	
 	
 	
 	/*
@@ -137,10 +320,12 @@ public class JavaJSONConverter {
 	 * 
 	 */
 	
+	@Deprecated
 	public static Object[] fromJson(JSONArray element, Class<?> inClazz) throws IOException{
 		return insertArray(inClazz, element);
 	}
 	
+	@Deprecated
 	public static Object fromJson(JSONObject element, Class<?> inClazz) throws IOException{
 		Object obj;
 		try {
@@ -152,27 +337,40 @@ public class JavaJSONConverter {
 		}
 		
 		for(Field field : inClazz.getDeclaredFields()){
-			if(!Modifier.isStatic(field.getModifiers()))
+			if(!Modifier.isStatic(field.getModifiers()) && isAffected(field))
 				parse(field, element, obj);
 		}
 		
 		return obj;
 	}
 
+	@Deprecated
 	private static void parse(Field field, JSONObject element, Object obj) throws IOException {
 		for(String key : element.keySet()){
-			if(field.getName().equals(key)){
-				setValue(field, element.get(key), obj);
-			}
+			String name = getNameFrom(field);
+			if(!name.equals(key))
+				continue;
+			setValue(field, element.get(key), obj);
 		}
 	}
 
+	@Deprecated
+	private static String getNameFrom(Field field) {
+		JSONAttribute jfa = field.getAnnotation(JSONAttribute.class);
+		if(jfa==null)
+			return field.getName();
+		if(jfa.Name().isEmpty())
+			return field.getName();
+		return jfa.Name();
+	}
+
+	@Deprecated
 	private static void setValue(Field field, Object value, Object obj) throws IOException{
 		boolean accessFlag = field.isAccessible();
 		try{
 			field.setAccessible(true);
 			if(field.getType().isArray() && value instanceof JSONArray){			
-				field.set(obj, insertArray(getArrayType(field), (JSONArray) value));
+				field.set(obj, insertArray(field.getType().getComponentType(), (JSONArray) value));
 			}else if(value instanceof JSONObject){
 				field.set(obj, fromJson((JSONObject) value, field.getType()));
 			}else{
@@ -187,6 +385,7 @@ public class JavaJSONConverter {
 		}
 	}
 
+	@Deprecated
 	private static Object[] insertArray(Class<?> arrType, JSONArray value) throws IOException {
 		int length = value.length();
 		Object[] resArr = new Object[length];
@@ -197,6 +396,7 @@ public class JavaJSONConverter {
 		return resArr;
 	}
 
+	@Deprecated
 	private static Object insertElement(Object object, Class<?> arrType) throws IOException {
 		if(object instanceof JSONObject){
 			return fromJson((JSONObject) object, arrType);
@@ -206,7 +406,4 @@ public class JavaJSONConverter {
 		return object;
 	}
 	
-	private static Class<?> getArrayType(Field field) {
-		return field.getType().getComponentType();
-	}
 }

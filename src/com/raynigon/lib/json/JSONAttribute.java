@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface JsonFieldAttribute {
+public @interface JSONAttribute {
 
 	public boolean Affect() default true;
 	public String Name() default "";

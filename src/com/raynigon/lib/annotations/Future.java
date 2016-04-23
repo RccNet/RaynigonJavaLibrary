@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /** Future Annotation indicates that this is a feature which will be available in the Future.
- * It could be that the method wont work completly as expected
+ * It could be that the method wont work completely as expected, or just wraps some old code
  * @author Simon Schneider
  */
 @Retention(RetentionPolicy.SOURCE)
@@ -20,6 +20,9 @@ import java.lang.annotation.Target;
 	})
 public @interface Future {
 
+	/**Returns the version Number in which the Feature should be fully implemented
+	 * @return version in which the Feature should be fully implemented
+	 */
 	String Version();
 
 }
