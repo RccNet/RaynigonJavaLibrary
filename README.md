@@ -7,6 +7,7 @@ Compatibly to Java: **1.7.0**
 ###Event Handling
 ###IOUtils
 ###Database Connectors
+###Rest Service
 ##Development
 **Comming Versions:**
  - 0.0.1: *Released*
