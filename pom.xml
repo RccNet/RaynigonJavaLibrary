@@ -6,7 +6,7 @@
   <name>RaynigonJavaLibrary</name>
   <description>The Raynigon Java Library contains some awesome features</description>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
       <resource>
         <directory>src_old</directory>
