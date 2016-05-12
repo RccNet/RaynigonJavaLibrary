@@ -26,12 +26,14 @@ Features:
 - IOUtils for Stream conversion, e.g. stream -> stream, string -> stream...
 - JSON Mapper, creates Objects from JSON and also JSON from Objects
 - Byte Conversion
+
 ### Version 0.0.2
 Release Date: 12.05.2016
 
 Features:
 - Byte Conversion, fast implementation
 - ZIP Compression
+
 ### Version 0.0.3
 Planned ReleaseData: June 2016
 
@@ -40,9 +42,11 @@ Planned Features:
   - [ ] RestService 
   - [ ] JSON Refactoring
   - [ ] JSON Custom Field Converters
+
 ### Version 0.0.4
 Planned Release Date: July 2016
 
 Planned Features:
   - [ ] Extends Event Handling with customs Threads (Costumizeable with the EventHandler and a Lambda)
+
 ### Version 0.0.5
