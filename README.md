@@ -1,6 +1,10 @@
 # RaynigonJavaLibrary
 Build Status: [![Build Status](https://travis-ci.org/RccNet/RaynigonJavaLibrary.svg?branch=master)](https://travis-ci.org/RccNet/RaynigonJavaLibrary)
 
+[JavaDoc Link](http://rccnet.de/javadoc/rayjavalib/index.html)
+
+[Download Binary](http://rccnet.de/index.php/downloads/download/4-java/2-ray-java-lib)
+
 ##Release
 Released Lib Version: **0.0.2**
 
