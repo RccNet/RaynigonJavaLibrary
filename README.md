@@ -1,4 +1,6 @@
 # RaynigonJavaLibrary
+Build Status: [![Build Status](https://travis-ci.org/RccNet/RaynigonJavaLibrary.svg?branch=master)](https://travis-ci.org/RccNet/RaynigonJavaLibrary)
+
 ##Release
 Released Lib Version: **0.0.1**
 
@@ -9,6 +11,7 @@ Compatibly to Java: **1.7.0**
 ###Database Connectors
 ###Rest Service
 ##Development
+
 **Comming Versions:**
  - 0.0.1: *Released*
  - 0.0.2: May 2016
