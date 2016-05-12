@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.raynigon</groupId>
   <artifactId>RaynigonJavaLib</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <name>RaynigonJavaLibrary</name>
   <description>The Raynigon Java Library contains some awesome features</description>
   <build>
