@@ -1,5 +1,5 @@
 # RaynigonJavaLibrary
-Build Status: [![Build Status](https://travis-ci.org/RccNet/RaynigonJavaLibrary.svg?branch=master)](https://travis-ci.org/RccNet/RaynigonJavaLibrary)
+Build Status: [![Build Status](https://travis-ci.org/RccNet/RaynigonJavaLibrary.svg?branch=version-0.0.2)](https://travis-ci.org/RccNet/RaynigonJavaLibrary)
 
 [JavaDoc Link](http://rccnet.de/javadoc/rayjavalib/index.html)
 
