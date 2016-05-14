@@ -6,21 +6,9 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-<<<<<<< HEAD
-	<classpathentry kind="src" output="target/classes" path="src/test/java">
-=======
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
->>>>>>> refs/remotes/origin/master
 		<attributes>
 			<attribute name="optional" value="true"/>
-<<<<<<< HEAD
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-=======
->>>>>>> refs/remotes/origin/master
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
