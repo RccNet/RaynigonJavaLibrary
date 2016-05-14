@@ -64,7 +64,7 @@
   	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
-  		<scope>provided</scope>
+  		<scope>test</scope>
   	</dependency>
   </dependencies>
   <url>http://raynigon.com/maven/RaynigonJavaLib</url>
@@ -77,4 +77,7 @@
   		</dependency>
   	</dependencies>
   </dependencyManagement>
+  <scm>
+  	<url>https://github.com/RccNet/RaynigonJavaLibrary</url>
+  </scm>
 </project>
