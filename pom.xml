@@ -2,11 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.raynigon</groupId>
   <artifactId>RaynigonJavaLib</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <name>RaynigonJavaLibrary</name>
   <description>The Raynigon Java Library contains some awesome features</description>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
       <resource>
         <directory>src_old</directory>
@@ -64,7 +64,7 @@
   	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
-  		<scope>provided</scope>
+  		<scope>test</scope>
   	</dependency>
   </dependencies>
   <url>http://raynigon.com/maven/RaynigonJavaLib</url>
@@ -77,4 +77,7 @@
   		</dependency>
   	</dependencies>
   </dependencyManagement>
+  <scm>
+  	<url>https://github.com/RccNet/RaynigonJavaLibrary</url>
+  </scm>
 </project>
