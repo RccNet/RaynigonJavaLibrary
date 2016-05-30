@@ -1,10 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.raynigon</groupId>
-  <artifactId>RaynigonJavaLib</artifactId>
   <version>0.0.2</version>
-  <name>RaynigonJavaLibrary</name>
-  <description>The Raynigon Java Library contains some awesome features</description>
+  <name>RayCommons</name>
+  <description>The Raynigon Java Library is a collection of usefull features. e.g. Annotation Based Event Management</description>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
@@ -80,4 +79,15 @@
   <scm>
   	<url>https://github.com/RccNet/RaynigonJavaLibrary</url>
   </scm>
+  <artifactId>RayCommons</artifactId>
+  <distributionManagement>
+    <downloadUrl>https://github.com/RccNet/RaynigonJavaLibrary</downloadUrl>
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>GithubRayCommons</id>
+      <name>RayCommons Maven Repo</name>
+      <url>https://github.com/RccNet/RaynigonJavaLibrary</url>
+      <layout>default</layout>
+    </repository>
+  </distributionManagement>
 </project>

@@ -25,7 +25,7 @@ public class TestZipCompressor {
 	
 	private File folder;
 
-	//@Before
+	@Before
 	public void setUp() throws Exception {
 		Random r = new Random();
 		folder = new File("tmp/ziptest/");
@@ -43,12 +43,12 @@ public class TestZipCompressor {
 		}
 	}
 
-	//@After
+	@After
 	public void tearDown() throws Exception {
 		delete(folder);
 	}
 
-	//@Test
+	@Test
 	public void CompressFolderTest() throws IOException {
 		File destination = new File(folder, "data.zip");
 		destination.delete();
@@ -58,7 +58,7 @@ public class TestZipCompressor {
 	}
 	
 
-	//@Test
+	@Test
 	public void CompressCollectionTest() throws IOException {
 		File destination = new File(folder, "data.zip");
 		destination.delete();
@@ -67,7 +67,7 @@ public class TestZipCompressor {
 		checkZipFile(destination);
 	}
 	
-	//@Test
+	@Test
 	public void DecompressTest() throws IOException {
 		File source = new File(folder, "dataToUnzip.zip");
 		File destination = new File(folder, "unzip");

@@ -54,12 +54,13 @@ public final class ZipCompressor implements Compressor {
         for(ZipEntry ze = zis.getNextEntry();ze != null;ze = zis.getNextEntry()) {
             String filename = ze.getName();
             File destFile = new File(destination, filename+File.separator);
-            if(!ze.isDirectory()){
-            	FileOutputStream fos = new FileOutputStream(destFile);
-                IOUtils.copy(zis, fos);
-                fos.close();	
+            if(ze.isDirectory()){
+                destFile.mkdirs();
             }else{
-            	destFile.mkdirs();            
+            	destFile.createNewFile();
+                FileOutputStream fos = new FileOutputStream(destFile);
+                IOUtils.copy(zis, fos);
+                fos.close();    
             }
             zis.closeEntry();
         }
