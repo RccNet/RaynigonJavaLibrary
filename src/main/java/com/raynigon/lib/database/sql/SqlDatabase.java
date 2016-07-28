@@ -46,7 +46,7 @@ public abstract class SqlDatabase{
 	 * <th>Property</th>
 	 * <th>Comment</th>
 	 * </tr>
-	 * <tr><td>type = [ sqllite | mysql | postgresql ]</td><td>Use one of them</td></tr>
+	 * <tr><td>type = [ sqlite | mysql | postgresql ]</td><td>Use one of them</td></tr>
 	 * <tr><td>path = some_path/sql_lite_db.sqlite</td><td>the path to the sqllite database file</td></tr>
 	 * <tr><td>host = 123.123.123.123</td><td>the hostname of the mysql/postgresql server</td></tr>			
 	 * <tr><td>username = my_user</td><td>the user of the mysql/postgresql server</td></tr>
@@ -69,9 +69,9 @@ public abstract class SqlDatabase{
 		Logger logger = null;
 		if(!loggerName.equalsIgnoreCase("null"))
 			logger = Logger.getLogger(loggerName);
-		String type = settings.getProperty("type", "sqllite").toLowerCase();
-		if(type.equalsIgnoreCase("sqllite")){
-			File path = new File(settings.getProperty("path", "sql_lite_db.slite").toLowerCase());
+		String type = settings.getProperty("type", "sqlite").toLowerCase();
+		if(type.equalsIgnoreCase("sqlite")){
+			File path = new File(settings.getProperty("path", "sqlite_db.slite").toLowerCase());
 			SQLiteDatabase litedb = new SQLiteDatabase();
 			litedb.setLogger(logger);
 			litedb.openDatabase(path);
@@ -90,6 +90,7 @@ public abstract class SqlDatabase{
 		}else if(type.equalsIgnoreCase("postgresql")){
 			throw new SQLException("Not Supported");
 		}else{
+		    logger.log(Level.SEVERE, "Unable to create a "+type+" Database Interface");
 			return null;
 		}
 	}
