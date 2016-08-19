@@ -86,7 +86,7 @@
       <uniqueVersion>false</uniqueVersion>
       <id>GithubRayCommons</id>
       <name>RayCommons Maven Repo</name>
-      <url>https://github.com/RccNet/RaynigonJavaLibrary</url>
+      <url>https://http://www.maven.raynigon.com/</url>
       <layout>default</layout>
     </repository>
   </distributionManagement>
