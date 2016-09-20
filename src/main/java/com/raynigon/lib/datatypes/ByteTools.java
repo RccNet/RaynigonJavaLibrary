@@ -1,4 +1,4 @@
-package com.raynigon.lib.primitive_data_types;
+package com.raynigon.lib.datatypes;
 
 /** The Byte Tools Class allows you to create byte arrays from simple data types and simple data types from byte arrays
  * @author Simon Schneider

@@ -1,4 +1,4 @@
-package com.raynigon.lib.primitive_data_types;
+package com.raynigon.lib.datatypes;
 
 public class ByteShiftingException extends RuntimeException {
 

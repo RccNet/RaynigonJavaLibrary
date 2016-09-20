@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.raynigon.lib.primitive_data_types.ByteTools;
+import com.raynigon.lib.datatypes.ByteTools;
 
 public class ByteToolsTest {
 
