@@ -1,6 +1,7 @@
 package com.raynigon.lib.json;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -218,6 +219,8 @@ public class JavaJSONConverter {
 		JSONArray array = new JSONArray();
 		Object[] arr = (Object[]) obj;
 		for(Object element : arr){
+		    if(element==null)
+		        continue;
 			Class<?> type = element.getClass();
 			if(type.isArray())
 				array.put(fromJava(element, type.getComponentType()));
@@ -250,6 +253,8 @@ public class JavaJSONConverter {
 					jsonobj.put(fieldName, getValue(f, obj));
 				}else if(f.getType().isArray()){
 					jsonobj.put(f.getName(), fromJava(getValue(f, obj), f.getType().getComponentType()));
+				}else if(f.getType()==JSONObject.class){
+				    jsonobj.put(fieldName, getValue(f, obj));
 				}else{
 					jsonobj.put(fieldName, fromJava(getValue(f, obj)));
 				}
@@ -369,8 +374,10 @@ public class JavaJSONConverter {
 		boolean accessFlag = field.isAccessible();
 		try{
 			field.setAccessible(true);
-			if(field.getType().isArray() && value instanceof JSONArray){			
-				field.set(obj, insertArray(field.getType().getComponentType(), (JSONArray) value));
+			if(field.getType().isArray() && value instanceof JSONArray){		
+			    Class<?> arrType = field.getType();
+			    Object[] array = insertArray(field.getType().getComponentType(), (JSONArray) value);
+				field.set(obj, arrType.cast(array));
 			}else if(value instanceof JSONObject){
 				field.set(obj, fromJson((JSONObject) value, field.getType()));
 			}else{
@@ -388,7 +395,7 @@ public class JavaJSONConverter {
 	@Deprecated
 	private static Object[] insertArray(Class<?> arrType, JSONArray value) throws IOException {
 		int length = value.length();
-		Object[] resArr = new Object[length];
+		Object[] resArr = (Object[]) Array.newInstance(arrType, length);//new Object[length];
 		
 		for(int i=0;i<length;i++)
 			resArr[i] = insertElement(value.get(i), arrType);
