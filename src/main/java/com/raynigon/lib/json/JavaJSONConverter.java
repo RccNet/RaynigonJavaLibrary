@@ -253,7 +253,7 @@ public class JavaJSONConverter {
 					jsonobj.put(fieldName, getValue(f, obj));
 				}else if(f.getType().isArray()){
 					jsonobj.put(f.getName(), fromJava(getValue(f, obj), f.getType().getComponentType()));
-				}else if(f.getType()==JSONObject.class){
+				}else if(f.getType()==JSONObject.class || f.getType()==JSONArray.class){
 				    jsonobj.put(fieldName, getValue(f, obj));
 				}else{
 					jsonobj.put(fieldName, fromJava(getValue(f, obj)));
@@ -272,7 +272,9 @@ public class JavaJSONConverter {
 				jsonobj.put(jma.Name(), value);
 			}else if(type.isArray()){
 				jsonobj.put(jma.Name(), fromJava(getValue(m, obj), type.getComponentType()));
-			}else{
+			}else if(type==JSONObject.class || type==JSONArray.class){
+                jsonobj.put(jma.Name(), value);
+            }else{
 				jsonobj.put(jma.Name(), fromJava(value));
 			}
 		}
