@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,13 +32,27 @@ public class JavaJSONConverter {
 		}
 	}
 	
-	private static JSONArray compMapperFJA(Object[] inA){
+	private static <T> JSONArray compMapperFJA(T[] inA){
 		try {
 			return fromJava(inA, inA.getClass().getComponentType());
 		} catch (IOException e) {
 			throw new JSONParseException("compatibility Exception",e);
 		}
 	}
+	
+    private static <T> JSONArray compMapperFJC(Collection<T> inColl){
+        JSONArray result = new JSONArray();
+        if(inColl==null)
+            return null;
+        try {
+            for(T object : inColl){
+                result.put(fromJava(object));
+            }
+        } catch (IOException e) {
+            throw new JSONParseException("compatibility Exception",e);
+        }
+        return result;
+    }	
 	
 	private static Object compMapperFJO(JSONObject inO, Class<?> clazz){
 		try {
@@ -59,7 +74,9 @@ public class JavaJSONConverter {
 	@Future(Version="0.0.5")
 	public static JSONObject 	fromJavaObject(Object inObject){return compMapperFJO(inObject);}
 	@Future(Version="0.0.5")
-	public static JSONArray 	fromJavaArray(Object[] inArray){return compMapperFJA(inArray);}
+	public static <T> JSONArray fromJavaArray(T[] inArray){return compMapperFJA(inArray);}
+    @Future(Version="0.0.5")
+    public static <T> JSONArray fromJavaCollection(Collection<T> inList){return compMapperFJC(inList);}	
 	
 	@Future(Version="0.0.5")
 	public static Object		fromJSONObject(JSONObject inObject, Class<?> inClazz){return compMapperFJO(inObject, inClazz);}
@@ -233,7 +250,31 @@ public class JavaJSONConverter {
 		return array;
 	}
 	
-	@Deprecated
+	
+    /*@SuppressWarnings("unchecked")
+    public static <T> void AssignValue(JSONObject jobj, String key, T value, ParameterizedType genericType){
+	    Class<T> typeClass = (Class<T>) value.getClass();
+	    if(typeClass.isPrimitive()){
+	        jobj.put(key, value);
+	    }else if(Number.class.isAssignableFrom(typeClass)){
+	        jobj.put(key, ((Number) value).longValue());
+	    }else if(typeClass==JSONObject.class || typeClass==JSONArray.class){
+	        jobj.put(key, value);
+	    }else if(typeClass.isArray()){
+	        
+	    }else if(Collection.class.isAssignableFrom(typeClass)){
+	        Class<?> collectionType = (Class<?>) genericType.getActualTypeArguments()[0];
+	        jobj.put(key, createArray(value, genericType));
+	    }
+	    
+	}
+	
+	private static <T> JSONArray createArray(Collection<T> value, ParameterizedType genericType){
+        // TODO Auto-generated method stub
+        return null;
+    }*/
+
+    @Deprecated
 	public static JSONObject fromJava(Object obj) throws IOException{
 		if(obj==null)
 			return null;
@@ -248,14 +289,33 @@ public class JavaJSONConverter {
 			f.setAccessible(true);
 			if(isAffected(f)){
 				String fieldName = getFieldName(f);
-				if(f.getType().isPrimitive() || f.getType()==String.class || 
-						Number.class.isAssignableFrom(f.getType())){
+				if(f.getType().isPrimitive() || f.getType()==String.class){
 					jsonobj.put(fieldName, getValue(f, obj));
+				}else if(Number.class.isAssignableFrom(f.getType())){
+				    jsonobj.put(fieldName, ((Number) getValue(f, obj)).longValue());
 				}else if(f.getType().isArray()){
 					jsonobj.put(f.getName(), fromJava(getValue(f, obj), f.getType().getComponentType()));
 				}else if(f.getType()==JSONObject.class || f.getType()==JSONArray.class){
 				    jsonobj.put(fieldName, getValue(f, obj));
-				}else{
+				}else if(Collection.class.isAssignableFrom(f.getType())){
+				    JSONArray jArr = new JSONArray();
+				    Collection<?> coll = (Collection<?>) getValue(f, obj);
+				    for(Object item : coll){
+				        Class<?> type = item.getClass();
+		                if(type==String.class){
+		                    jArr.put(item);
+		                }else if(Number.class.isAssignableFrom(type)){
+		                    jArr.put(((Number) item).longValue());
+		                }else if(type.isArray()){
+		                    jArr.put(fromJava(item, type.getComponentType()));
+		                }else if(type==JSONObject.class || type==JSONArray.class){
+		                    jArr.put(item);
+		                }else{
+		                    jArr.put(fromJava(item));
+		                }
+				    }
+                    jsonobj.put(fieldName, jArr);
+                }else{
 					jsonobj.put(fieldName, fromJava(getValue(f, obj)));
 				}
 			}
