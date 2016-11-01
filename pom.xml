@@ -109,20 +109,7 @@
   		</dependency>
   	</dependencies>
   </dependencyManagement>
-  <scm>
-  	<url>https://github.com/RccNet/RaynigonJavaLibrary</url>
-  </scm>
   <artifactId>RayCommons</artifactId>
-  <distributionManagement>
-    <downloadUrl>https://github.com/RccNet/RaynigonJavaLibrary</downloadUrl>
-    <repository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>GithubRayCommons</id>
-      <name>RayCommons Maven Repo</name>
-      <url>https://http://www.maven.raynigon.com/</url>
-      <layout>default</layout>
-    </repository>
-  </distributionManagement>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
