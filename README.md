@@ -7,9 +7,14 @@ Build Status: [![Build Status](https://travis-ci.org/RccNet/RaynigonJavaLibrary.
 
 ##Release
 Released Lib Version: **0.1.2**
-Released Lib Version (Java 1.7): **0.0.2**
 
 Compatibly to Java: **1.8.0**
+
+##Release (Java 1.7)
+Released Lib Version: **0.0.2**
+
+Compatibly to Java: **1.7.0**
+
 ##Maven
 
 TODO Insert Link to maven repo
