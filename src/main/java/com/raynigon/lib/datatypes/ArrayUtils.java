@@ -16,8 +16,7 @@ public class ArrayUtils{
     }
     
     public static <T> int findElement(T[] array, T element){
-        ItemComparator<T> comp = (T item0, T item1)->{return item0!=null ? item0.equals(item1) : item1==null;};
-        return findElement(array, element, comp);
+        return findElement(array, element, ItemComparator.getDefault());
     }
     
     public static int findElement(byte[] array, byte element){
