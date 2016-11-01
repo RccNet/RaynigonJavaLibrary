@@ -10,6 +10,22 @@ import com.raynigon.lib.datatypes.ArrayUtils;
 public class ArrayUtilsTest{
 
     @Test
+    public void testAddElementObject(){
+        String[] array = new String[]{"123", "hallo", "dies", "das", "sonst", "was"};
+        String[] expResult = new String[]{"123", "hallo", "dies", "das", "sonst", "was", "welt"};
+        String[] realResult = ArrayUtils.addElement(array, "welt");
+        assertArrayEquals(expResult, realResult);
+    }
+    
+    @Test
+    public void testAddElementInt(){
+        int[] array = new int[]{1,2,3,4,5,6,8,9};
+        int[] expResult = new int[]{1,2,3,4,5,6,8,9,7};
+        int[] realResult = ArrayUtils.addElement(array, 7);
+        assertArrayEquals(expResult, realResult);
+    }
+    
+    @Test
     public void testFindElementObject(){
         String[] array = new String[]{"123", "hallo", "welt", "dies", "das", "sonst", "was"};
         int pos = ArrayUtils.findElement(array, "hallo");

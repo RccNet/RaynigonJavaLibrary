@@ -3,24 +3,21 @@ package com.raynigon.lib.datatypes;
 import java.lang.reflect.Array;
 
 public class ArrayUtils{
-
-    public static <T> int findElement(T[] array, T element){
+    
+    public static <T> int findElement(T[] array, T element, ItemComparator<T> comp){
         int position = -1;
         for(int i=0;i<array.length;i++){
-            if(array[i]==null){
-                if(element!=null){
-                    continue;
-                }else{
-                    position = i;
-                    break;  
-                }
-            }
-            if(!array[i].equals(element))
+            if(!comp.equals(array[i],element))
                 continue;
             position = i;
             break;
         }
         return position;
+    }
+    
+    public static <T> int findElement(T[] array, T element){
+        ItemComparator<T> comp = (T item0, T item1)->{return item0!=null ? item0.equals(item1) : item1==null;};
+        return findElement(array, element, comp);
     }
     
     public static int findElement(byte[] array, byte element){
@@ -160,6 +157,49 @@ public class ArrayUtils{
             System.arraycopy(array, 0, result, 0, length0);
         if(length1>0)
             System.arraycopy(array, pos+1, result, length0, length1);
+        return result;
+    }
+
+    public static <T> T[] addElement(T[] array, T element){
+        @SuppressWarnings("unchecked")
+        T[] result = (T[]) Array.newInstance(array.getClass().getComponentType(), array.length+1);
+        System.arraycopy(array, 0, result, 0, array.length);
+        result[array.length] = element;
+        return result;
+    }
+    
+    public static byte[] addElement(byte[] array, byte element){
+        byte[] result = new byte[array.length+1];
+        System.arraycopy(array, 0, result, 0, array.length);
+        result[array.length] = element;
+        return result;
+    }
+    
+    public static char[] addElement(char[] array, char element){
+        char[] result = new char[array.length+1];
+        System.arraycopy(array, 0, result, 0, array.length);
+        result[array.length] = element;
+        return result;
+    }
+    
+    public static short[] addElement(short[] array, short element){
+        short[] result = new short[array.length+1];
+        System.arraycopy(array, 0, result, 0, array.length);
+        result[array.length] = element;
+        return result;
+    }
+    
+    public static int[] addElement(int[] array, int element){
+        int[] result = new int[array.length+1];
+        System.arraycopy(array, 0, result, 0, array.length);
+        result[array.length] = element;
+        return result;
+    }
+    
+    public static long[] addElement(long[] array, long element){
+        long[] result = new long[array.length+1];
+        System.arraycopy(array, 0, result, 0, array.length);
+        result[array.length] = element;
         return result;
     }
 }
