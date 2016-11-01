@@ -1,4 +1,4 @@
-package test.raynigon.lib.primitive_data_types;
+package test.raynigon.lib.datatypes;
 
 import static org.junit.Assert.*;
 
