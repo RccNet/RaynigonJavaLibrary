@@ -1,14 +1,14 @@
 # RaynigonJavaLibrary
-Build Status: [![Build Status](https://travis-ci.org/RccNet/RaynigonJavaLibrary.svg?branch=master)](https://travis-ci.org/RccNet/RaynigonJavaLibrary)
+Build Status: [![Build Status](https://travis-ci.org/RccNet/RaynigonJavaLibrary.svg?branch=Java1.7)](https://travis-ci.org/RccNet/RaynigonJavaLibrary)
 
-[JavaDoc Link](http://rccnet.de/javadoc/rayjavalib/index.html)
+[JavaDoc Link](http://rccnet.de/javadoc/rayjavalib_0_0_2/index.html)
 
 [Download Binary](http://rccnet.de/index.php/downloads/download/4-java/2-ray-java-lib)
 
 ##Release
 Released Lib Version: **0.0.2**
 
-Compatibly to Java: **1.8.0**
+Compatibly to Java: **1.7.0**
 ##Maven
 
 TODO Insert Link to maven repo
