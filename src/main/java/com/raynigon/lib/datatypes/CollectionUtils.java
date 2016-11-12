@@ -58,4 +58,15 @@ public class CollectionUtils{
         }
         return result;
     }
+    
+    public static <T> T findItem(List<T> collection, ItemCheck<T> comparator){
+        T result = null;
+        for(T item : collection){
+            if(!comparator.check(item))
+                continue;
+            result = item;
+            break;
+        }
+        return result;
+    }
 }
