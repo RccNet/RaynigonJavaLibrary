@@ -109,7 +109,7 @@
   	</dependencies>
   </dependencyManagement>
   <artifactId>RayCommons</artifactId>
-  <distributionManagement>
+  <!-- <distributionManagement>
     <downloadUrl>https://github.com/RccNet/RaynigonJavaLibrary</downloadUrl>
     <repository>
       <uniqueVersion>false</uniqueVersion>
@@ -118,7 +118,7 @@
       <url>https://http://www.maven.raynigon.com/</url>
       <layout>default</layout>
     </repository>
-  </distributionManagement>
+  </distributionManagement>-->
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
