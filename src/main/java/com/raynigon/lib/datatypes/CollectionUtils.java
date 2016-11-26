@@ -1,5 +1,6 @@
 package com.raynigon.lib.datatypes;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -68,5 +69,19 @@ public class CollectionUtils{
             break;
         }
         return result;
+    }
+
+    public static <T> Collection<T> copy(Collection<T> input, ItemCheck<T> comparator){
+        List<T> result = new ArrayList<>();
+        copy(input, result, comparator);
+        return result;
+    }
+    
+    public static <T> void copy(Collection<T> input, Collection<T> output, ItemCheck<T> comparator){
+        for(T item : input){
+            if(!comparator.check(item))
+                continue;
+            output.add(item);
+        }
     }
 }
