@@ -27,7 +27,7 @@ TODO Insert Link to maven repo
 ###Database Connectors
 ###Rest Service
 ##Versions
-### Version 0.0.1
+### Version 0.1.1
 Release Date: 20.01.2016
 
 Features:
@@ -39,22 +39,25 @@ Features:
 - JSON Mapper, creates Objects from JSON and also JSON from Objects
 - Byte Conversion
 
-### Version 0.0.2
+### Version 0.1.2
 Release Date: 12.05.2016
 
 Features:
 - Byte Conversion, fast implementation
 - ZIP Compression
 
-### Version 0.0.3
+### Version 0.1.3
 Planned ReleaseData: June 2016
 
 Planned Features:
-- [ ] RestClient Interface and Abstract Class
-- [ ] RestService 
+- [ ] RestClient Interface and Abstract Class **(abandoned)**
+- [ ] RestService **(abandoned)**
 - [ ] JSON Refactoring
-- [ ] JSON Custom Field Converters
+- [x] JSON Custom Field Converters
 - [ ] Math min, max with arrays e.g. RayMath.min(int a, int b, int... values)
+- [ ] implement parts of the C++ algorithm library in Java
+ - [ ] std::find
+ - [ ] std::sort
 
 ### Version 0.0.4
 Planned Release Date: July 2016
