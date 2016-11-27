@@ -61,10 +61,10 @@ Planned Features:
  - [x] std::remove
  - [ ] Math min, max with arrays
 
-### Version 0.0.4
+### Version 0.1.4
 Planned Release Date: December 2017
 
 Planned Features:
   - [ ] Extends Event Handling with customs Threads (Costumizeable with the EventHandler and a Lambda)
 
-### Version 0.0.5
+### Version 0.1.5
