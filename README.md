@@ -56,8 +56,11 @@ Planned Features:
 - [x] JSON Custom Field Converters
 - [ ] Math min, max with arrays e.g. RayMath.min(int a, int b, int... values)
 - [ ] implement parts of the C++ algorithm library in Java
- - [ ] std::find
+ - [x] std::find_if
  - [ ] std::sort
+ - [ ] std::copy_if
+ - [ ] std::fill
+ - [x] std::remove
 
 ### Version 0.0.4
 Planned Release Date: July 2016
