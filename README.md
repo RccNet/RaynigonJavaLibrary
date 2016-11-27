@@ -50,8 +50,6 @@ Features:
 Planned ReleaseData: June 2017
 
 Planned Features:
-- [ ] RestClient Interface and Abstract Class **(abandoned)**
-- [ ] RestService **(abandoned)**
 - [ ] JSON Refactoring
 - [x] JSON Custom Field Converters
 - [ ] Math min, max with arrays e.g. RayMath.min(int a, int b, int... values)
@@ -61,6 +59,7 @@ Planned Features:
  - [ ] std::copy_if
  - [ ] std::fill
  - [x] std::remove
+ - [ ] Math min, max with arrays
 
 ### Version 0.0.4
 Planned Release Date: December 2017
