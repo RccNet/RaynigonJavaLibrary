@@ -47,7 +47,7 @@ Features:
 - ZIP Compression
 
 ### Version 0.1.3
-Planned ReleaseData: June 2016
+Planned ReleaseData: June 2017
 
 Planned Features:
 - [ ] RestClient Interface and Abstract Class **(abandoned)**
@@ -63,7 +63,7 @@ Planned Features:
  - [x] std::remove
 
 ### Version 0.0.4
-Planned Release Date: July 2016
+Planned Release Date: December 2017
 
 Planned Features:
   - [ ] Extends Event Handling with customs Threads (Costumizeable with the EventHandler and a Lambda)
