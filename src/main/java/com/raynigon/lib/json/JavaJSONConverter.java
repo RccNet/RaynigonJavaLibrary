@@ -78,10 +78,13 @@ public class JavaJSONConverter {
     @Future(Version="0.0.5")
     public static <T> JSONArray fromJavaCollection(Collection<T> inList){return compMapperFJC(inList);}	
 	
-	@Future(Version="0.0.5")
-	public static Object		fromJSONObject(JSONObject inObject, Class<?> inClazz){return compMapperFJO(inObject, inClazz);}
-	@Future(Version="0.0.5")
-	public static List<?> fromJSONArray(JSONArray inArray, Class<?> inClazz){return compMapperFJA(inArray, inClazz);}
+	@SuppressWarnings("unchecked")
+    @Future(Version="0.0.5")
+	public static <T> T		  fromJSONObject(JSONObject inObject, Class<T> inClazz){return (T) compMapperFJO(inObject, inClazz);}
+	
+	@SuppressWarnings("unchecked")
+    @Future(Version="0.0.5")
+	public static <T> List<T> fromJSONArray(JSONArray inArray, Class<T> inClazz){return (List<T>) compMapperFJA(inArray, inClazz);}
 	
 	protected static String getNameFromField(Field inField){return null;}
 	protected static String getNameFromMethod(Method inMethod){return null;}
