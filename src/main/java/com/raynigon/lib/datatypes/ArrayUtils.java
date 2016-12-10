@@ -7,7 +7,7 @@ public class ArrayUtils{
     public static <T> int findElement(T[] array, T element, ItemComparator<T> comp){
         int position = -1;
         for(int i=0;i<array.length;i++){
-            if(!comp.equals(array[i],element))
+            if(comp.equals(array[i],element)!=0)
                 continue;
             position = i;
             break;
@@ -16,7 +16,7 @@ public class ArrayUtils{
     }
     
     public static <T> int findElement(T[] array, T element){
-        ItemComparator<T> comp = (T item0, T item1)->{return item0!=null ? item0.equals(item1) : item1==null;};
+        ItemComparator<T> comp = ItemComparator.getDefault();
         return findElement(array, element, comp);
     }
     

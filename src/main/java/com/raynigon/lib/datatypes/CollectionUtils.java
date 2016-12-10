@@ -24,7 +24,7 @@ public class CollectionUtils{
     public static <T> boolean contains(Collection<T> collection, T element, ItemComparator<T> comparator){
         boolean result = false;
         for(T item : collection){
-            if(!comparator.equals(item, element))
+            if(comparator.equals(item, element)!=0)
                 continue;
             result = true;
             break;
@@ -52,7 +52,7 @@ public class CollectionUtils{
         int result = -1;
         for(int index = 0;index<collection.size();index++){
             T item = collection.get(index);
-            if(!comparator.equals(item, element))
+            if(comparator.equals(item, element)!=0)
                 continue;
             result = index;
             break;
@@ -83,5 +83,25 @@ public class CollectionUtils{
                 continue;
             output.add(item);
         }
+    }
+    
+    public static <T> T findMax(Collection<T> collection, ItemComparator<T> comparator){
+        T max = null;
+        for(T item : collection){
+            if(comparator.equals(item, max)<=0)
+                continue;
+            max = item;
+        }
+        return max;
+    }
+    
+    public static <T> T findMin(Collection<T> collection, ItemComparator<T> comparator){
+        T min = null;
+        for(T item : collection){
+            if(comparator.equals(item, min)>=0)
+                continue;
+            min = item;
+        }
+        return min;
     }
 }
