@@ -1,14 +1,12 @@
 package com.raynigon.lib.crypting;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Cipher;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 /**Generated on 28.11.2015 by Simon Schneider in Project <b>RaynigonJavaLib</b><p>
  * This should automatically install the extended java security policies, but its too complicated due to windows security handling.
@@ -26,7 +24,8 @@ class PolicyManager {
 		return new File(jvm_location);
 	}
 	
-	private boolean isInstalled(){
+	@SuppressWarnings("unused")
+    private boolean isInstalled(){
 		boolean check = false;
 		try{
 			check = Cipher.getMaxAllowedKeyLength("Blowfish")>16;
@@ -34,7 +33,8 @@ class PolicyManager {
 		return check;
 	}
 	
-	private void install() throws IOException{
+	@SuppressWarnings("unused")
+    private void install() throws IOException{
 		File f = new File(getLibSecurityFolder(), "local_policy.jar");
 		
 		if(f.exists() && !f.delete())

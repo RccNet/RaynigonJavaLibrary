@@ -3,7 +3,6 @@ package com.raynigon.lib.database.utils;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,6 +42,7 @@ public class DatabaseBulkWriter {
 				for(String key : jsonDs.keySet())
 					ds.fields.add(new Pair(key, jsonDs.getString(key)));
 			}
+			tables.add(table);
 		}
 		
 		bulkInsert(tables, inDatabase);
