@@ -1,5 +1,7 @@
 # RaynigonJavaLibrary
-Build Status: [![Build Status](https://travis-ci.org/RccNet/RaynigonJavaLibrary.svg?branch=master)](https://travis-ci.org/RccNet/RaynigonJavaLibrary)
+Build Status: [![Build Status](https://travis-ci.org/raynigon/RaynigonJavaLibrary.svg?branch=master)](https://travis-ci.org/raynigon/RaynigonJavaLibrary)
+CI Best Practice: [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/522/badge)](https://bestpractices.coreinfrastructure.org/projects/522)
+
 
 [JavaDoc Link](http://rccnet.de/javadoc/rayjavalib/index.html)
 
@@ -25,7 +27,7 @@ TODO Insert Link to maven repo
 ###Database Connectors
 ###Rest Service
 ##Versions
-### Version 0.0.1
+### Version 0.1.1
 Release Date: 20.01.2016
 
 Features:
@@ -37,27 +39,32 @@ Features:
 - JSON Mapper, creates Objects from JSON and also JSON from Objects
 - Byte Conversion
 
-### Version 0.0.2
+### Version 0.1.2
 Release Date: 12.05.2016
 
 Features:
 - Byte Conversion, fast implementation
 - ZIP Compression
 
-### Version 0.0.3
-Planned ReleaseData: June 2016
+### Version 0.1.3
+Planned ReleaseData: June 2017
 
 Planned Features:
-- [ ] RestClient Interface and Abstract Class
-- [ ] RestService 
 - [ ] JSON Refactoring
-- [ ] JSON Custom Field Converters
+- [x] JSON Custom Field Converters
 - [ ] Math min, max with arrays e.g. RayMath.min(int a, int b, int... values)
+- [ ] implement parts of the C++ algorithm library in Java
+ - [x] std::find_if
+ - [ ] std::sort
+ - [ ] std::copy_if
+ - [ ] std::fill
+ - [x] std::remove
+ - [ ] Math min, max with arrays
 
-### Version 0.0.4
-Planned Release Date: July 2016
+### Version 0.1.4
+Planned Release Date: December 2017
 
 Planned Features:
   - [ ] Extends Event Handling with customs Threads (Costumizeable with the EventHandler and a Lambda)
 
-### Version 0.0.5
+### Version 0.1.5
