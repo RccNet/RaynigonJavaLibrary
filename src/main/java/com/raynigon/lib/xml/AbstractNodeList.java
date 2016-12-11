@@ -26,7 +26,7 @@ public abstract class AbstractNodeList<T extends Node>{
         
         public NodeListIterator(AbstractNodeList<U> nodeListEx){
             nodeList = nodeListEx;
-            pos = 0;
+            pos = -1;
         }
 
         @Override
