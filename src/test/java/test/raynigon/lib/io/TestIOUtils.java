@@ -1,6 +1,6 @@
 package test.raynigon.lib.io;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,9 +17,9 @@ import com.raynigon.lib.io.IOUtils;
 public class TestIOUtils {
 
 	private byte[] data_byte;
-	private String data_text;
+	/*private String data_text;
 	private byte[] data_bt_utf_8;
-	private byte[] data_bt_utf_16;
+	private byte[] data_bt_utf_16;*/
 	
 	
 	@Before
