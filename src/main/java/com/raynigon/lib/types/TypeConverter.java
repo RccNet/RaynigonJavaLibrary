@@ -5,12 +5,15 @@ import java.lang.reflect.InvocationTargetException;
 
 public class TypeConverter{
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static<T> T toType(String value, Class<T> type){
         if(type==String.class){
             return (T) value;
         }else if(type.isPrimitive()){
             return toPrimitiveType(value, type);
+        }else if(type.isEnum()){
+            Class<? extends Enum> enumType = type.asSubclass(Enum.class);
+            return (T) Enum.valueOf(enumType, value);
         }else if(getMatchingConstructor(type)!=null){
             Constructor<T> con = getMatchingConstructor(type);
             try{
