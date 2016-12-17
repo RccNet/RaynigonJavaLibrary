@@ -20,26 +20,26 @@ Compatibly to Java: **1.7.0**
 ##Maven
 
 ```
-	<dependency>
-		<groupId>com.raynigon</groupId>
-		<artifactId>RayCommons</artifactId>
-		<version>0.1.2</version>
-	</dependency>
+<dependency>
+	<groupId>com.raynigon</groupId>
+	<artifactId>RayCommons</artifactId>
+	<version>0.1.2</version>
+</dependency>
 ```
 
 ```
 <repositories>
-		<repository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</releases>
-			<id>Raynigon.com</id>
-			<name>Raynigon.com</name>
-			<url>http://www.maven.raynigon.com/</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
+	<repository>
+		<releases>
+			<enabled>true</enabled>
+			<updatePolicy>always</updatePolicy>
+		</releases>
+		<id>Raynigon.com</id>
+		<name>Raynigon.com</name>
+		<url>http://www.maven.raynigon.com/</url>
+		<layout>default</layout>
+	</repository>
+</repositories>
 ```
 
 ##Examples
