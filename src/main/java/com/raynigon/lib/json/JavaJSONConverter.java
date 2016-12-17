@@ -85,8 +85,23 @@ public class JavaJSONConverter {
     @Future(Version="0.0.5")
 	public static <T> List<T> fromJSONArray(JSONArray inArray, Class<T> inClazz){return (List<T>) compMapperFJA(inArray, inClazz);}
 	
-	protected static String getNameFromField(Field inField){return null;}
-	protected static String getNameFromMethod(Method inMethod){return null;}
+	protected static String getNameFromField(Field inField){
+	    JSONAttribute jsonAttr = inField.getAnnotation(JSONAttribute.class);
+	    if(jsonAttr==null)
+	        return inField.getName();
+	    if(!jsonAttr.Affect())
+	        return null;
+	    if(jsonAttr.Name().isEmpty())
+	        return inField.getName();
+	    return jsonAttr.Name();
+	}
+	
+	protected static String getNameFromMethod(Method inMethod){
+	    JSONMethod jsonMethod = inMethod.getAnnotation(JSONMethod.class);
+	    if(jsonMethod==null)
+	        return null;
+	    return jsonMethod.Name();
+	}
 	
 	protected static boolean isAffected(Field inField){
 		JSONAttribute ja = inField.getAnnotation(JSONAttribute.class);
@@ -116,17 +131,17 @@ public class JavaJSONConverter {
 				continue;
 			String name = getNameFromMethod(method);
 			if(!method.getReturnType().equals(Void.TYPE) && method.getParameterTypes().length==0)
-				addMethodToValueMap(map, name, obj, method, AttributeValue.TYPE_METHOD_GET);
+				addMethodToValueMap(map, name, obj, method);
 			else if(method.getReturnType().equals(Void.TYPE) && method.getParameterTypes().length==1)
-				addMethodToValueMap(map, name, obj, method, AttributeValue.TYPE_METHOD_SET);	
+				addMethodToValueMap(map, name, obj, method);	
 		}
 	}
 	
-	protected static void addMethodToValueMap(Map<String, AttributeValue> inMap, String name, Object obj, Method method, int inType) {
+	protected static void addMethodToValueMap(Map<String, AttributeValue> inMap, String name, Object obj, Method method) {
 		if(inMap.containsKey(name))
-			inMap.get(name).addMethod(method, inType);
+			inMap.get(name).addMethod(method);
 		else
-			inMap.put(name, new AttributeValue(name, obj, method, inType));
+			inMap.put(name, new AttributeValue(name, obj, method));
 	}
 
 	protected static Map<String, AttributeValue> findAttributeValues(Object obj){
@@ -141,8 +156,6 @@ public class JavaJSONConverter {
 	protected static class AttributeValue{
 		public static final int TYPE_FIELD = 0x100;
 		public static final int TYPE_METHOD = 0x200;
-		public static final int TYPE_METHOD_GET = 0x210;
-		public static final int TYPE_METHOD_SET = 0x211;
 		
 		private int type = 0;
 		private String name;
@@ -158,21 +171,20 @@ public class JavaJSONConverter {
 			field 	= inField;
 		}
 		
-		public AttributeValue(String inName, Object inObj, Method inMethod, int inType) {
+		public AttributeValue(String inName, Object inObj, Method inMethod) {
 			type 	= TYPE_METHOD;
 			name 	= inName;
 			obj 	= inObj;
-			if(inType==TYPE_METHOD_GET)
-				get_method 	= inMethod;
-			else
-				set_method = inMethod;
+			addMethod(inMethod);
 		}
 
-		public void addMethod(Method inMethod, int inType){
-			if(inType==TYPE_METHOD_GET)
-				get_method = inMethod;
-			else
-				set_method = inMethod;
+		public void addMethod(Method inMethod){
+		    if(inMethod.getParameterCount()==0)
+                get_method  = inMethod;
+            else if(inMethod.getParameterCount()==1)
+                set_method = inMethod;
+            else
+                throw new IllegalArgumentException("Setter methods must have only one Parameter");
 		}
 		
 		public int getType() {
@@ -219,6 +231,17 @@ public class JavaJSONConverter {
 				throw new JSONParseException("Error during pushing value into "+name, e);
 			}
 		}
+
+        public Class<?> getDataType(){
+            if(type==TYPE_FIELD){
+                return field.getType();
+            }else if(type==TYPE_METHOD && set_method!=null){
+                return set_method.getParameterTypes()[0];
+            }else if(type==TYPE_METHOD && get_method!=null){
+                return get_method.getReturnType();
+            }
+            return null;//TODO throw exception or so
+        }
 	}
 	
 	
@@ -405,54 +428,35 @@ public class JavaJSONConverter {
 			throw new IOException(e);
 		}
 		
-		for(Field field : inClazz.getDeclaredFields()){
-			if(!Modifier.isStatic(field.getModifiers()) && isAffected(field))
-				parse(field, element, obj);
-		}
+		Map<String, AttributeValue> valueMap = new HashMap<>();
+		addFieldsToValueMap(inClazz.getDeclaredFields(), obj, valueMap);
+		addMethodsToValueMap(inClazz.getDeclaredMethods(), obj, valueMap);
+		
+		parse(valueMap, element, obj);
 		
 		return obj;
 	}
 
 	@Deprecated
-	private static void parse(Field field, JSONObject element, Object obj) throws IOException {
+	private static void parse(Map<String, AttributeValue> valueMap, JSONObject element, Object obj) throws IOException {
 		for(String key : element.keySet()){
-			String name = getNameFrom(field);
-			if(!name.equals(key))
+			AttributeValue value = valueMap.get(key);
+			if(value==null)
 				continue;
-			setValue(field, element.get(key), obj);
+			setValue(value, element.get(key));
 		}
-	}
+	}	
 
 	@Deprecated
-	private static String getNameFrom(Field field) {
-		JSONAttribute jfa = field.getAnnotation(JSONAttribute.class);
-		if(jfa==null)
-			return field.getName();
-		if(jfa.Name().isEmpty())
-			return field.getName();
-		return jfa.Name();
-	}
-
-	@Deprecated
-	private static void setValue(Field field, Object value, Object obj) throws IOException{
-		boolean accessFlag = field.isAccessible();
-		try{
-			field.setAccessible(true);
-			if(field.getType().isArray() && value instanceof JSONArray){		
-			    Class<?> arrType = field.getType();
-			    Object[] array = insertArray(field.getType().getComponentType(), (JSONArray) value);
-				field.set(obj, arrType.cast(array));
-			}else if(value instanceof JSONObject){
-				field.set(obj, fromJson((JSONObject) value, field.getType()));
-			}else{
-				field.set(obj, insertElement(value, field.getType()));
-			}
-		}catch(IllegalArgumentException e){
-			throw new IOException(e);
-		}catch(IllegalAccessException e){
-			throw new IOException(e);
-		}finally {
-			field.setAccessible(accessFlag);
+	private static void setValue(AttributeValue attr, Object value) throws IOException{
+		if(attr.getDataType().isArray() && value instanceof JSONArray){		
+		    Class<?> arrType = attr.getDataType();
+		    Object[] array = insertArray(attr.getDataType().getComponentType(), (JSONArray) value);
+		    attr.setValue(arrType.cast(array));
+		}else if(value instanceof JSONObject){
+			attr.setValue(fromJson((JSONObject) value, attr.getDataType()));
+		}else{
+			attr.setValue(insertElement(value, attr.getDataType()));
 		}
 	}
 
