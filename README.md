@@ -1,5 +1,5 @@
 # RaynigonJavaLibrary
-Build Status: [![Build Status](https://travis-ci.org/raynigon/RaynigonJavaLibrary.svg?branch=master)](https://travis-ci.org/raynigon/RaynigonJavaLibrary)
+Build Status: [![Build Status](https://travis-ci.org/raynigon/RaynigonJavaLibrary.svg?branch=RayCommons-0.1.3)](https://travis-ci.org/raynigon/RaynigonJavaLibrary)
 CI Best Practice: [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/522/badge)](https://bestpractices.coreinfrastructure.org/projects/522)
 
 
