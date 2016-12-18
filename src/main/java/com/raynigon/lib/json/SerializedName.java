@@ -5,15 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Use {@link Expose} and {@link SerializedName}
- * @author Simon Schneider
- */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-@Deprecated
-public @interface JSONAttribute {
+@Target({ElementType.METHOD,ElementType.FIELD})
+public @interface SerializedName{
 
-	public boolean Affect() default true;
-	public String Name() default "";
+    public String name();
 }

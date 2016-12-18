@@ -5,8 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * @author Simon Schneider
+ * <b>Use</b> {@link SerializedName} <b>instead</b>
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
+@Deprecated
 public @interface JSONMethod {
 
 	public static final int FUNCTION_GET = 0;
