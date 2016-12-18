@@ -8,7 +8,7 @@ CI Best Practice: [![CII Best Practices](https://bestpractices.coreinfrastructur
 [Download Binary](http://rccnet.de/index.php/downloads/download/4-java/2-ray-java-lib)
 
 ##Release
-Released Lib Version: **0.1.2**
+Released Lib Version: **0.1.3**
 
 Compatibly to Java: **1.8.0**
 
@@ -68,11 +68,17 @@ Features:
 - ZIP Compression
 
 ### Version 0.1.3
-Planned ReleaseData: June 2017
+Planned ReleaseData: 18.12.2016
 
 Planned Features:
-- [ ] JSON Refactoring
+- [x] JSON Refactoring
 - [x] JSON Custom Field Converters
+
+### Version 0.1.4
+Planned Release Date: December 2017
+
+Planned Features:
+- [ ] Extends Event Handling with customs Threads (Costumizeable with the EventHandler and a Lambda)
 - [ ] Math min, max with arrays e.g. RayMath.min(int a, int b, int... values)
 - [ ] implement parts of the C++ algorithm library in Java
  - [x] std::find_if
@@ -81,11 +87,5 @@ Planned Features:
  - [ ] std::fill
  - [x] std::remove
  - [ ] Math min, max with arrays
-
-### Version 0.1.4
-Planned Release Date: December 2017
-
-Planned Features:
-  - [ ] Extends Event Handling with customs Threads (Costumizeable with the EventHandler and a Lambda)
 
 ### Version 0.1.5
