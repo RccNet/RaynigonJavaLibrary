@@ -62,7 +62,7 @@ public class EventManager {
 	 */
 	public synchronized void fireEvent(Event event) {
 		if(event==null){
-			return;
+		    throw new NullPointerException("The Event mustn't be null");
 		}
 		List<EventMethod> ems = getCallingMethods(event);
 		
@@ -77,6 +77,8 @@ public class EventManager {
 	 * @param inEventListener		The Event Listener Object which will be analyzed
 	 */
 	public synchronized void registerListener(EventListener inEventListener){
+	    if(inEventListener==null)
+	        throw new NullPointerException("The EventListener mustn't be null");
 		List<EventMethod> ev_methods = new LinkedList<EventMethod>();
 		Method[] methods = inEventListener.getClass().getMethods();
 		EventMethod evm = null;
@@ -101,6 +103,8 @@ public class EventManager {
 	 * @param inEventListener		The Event Listener from which all methods should be deleted
 	 */
 	public synchronized void removeListener(EventListener inEventListener){
+	    if(inEventListener==null)
+            throw new NullPointerException("The EventListener mustn't be null");
 		EventMethod[] ems = method_map.get(inEventListener);
 		List<EventMethod> methods;
 		for(EventMethod em : ems){

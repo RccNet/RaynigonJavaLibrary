@@ -25,7 +25,7 @@ public class SQLiteDatabase extends SqlDatabase {
 		new JDBC();
 		conn = DriverManager.getConnection("jdbc:sqlite:"+f.getAbsolutePath());
 		connectionStatus = true;
-		logInfo("SQLLite Database is ready");
+		log.info("SQLLite Database is ready");
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class SQLiteDatabase extends SqlDatabase {
 	public void close() throws Exception {
 		connectionClose();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY HH:mm:ss");
-		logInfo("SQLLite Database File was modified: "+sdf.format(new Date(f.lastModified())));
+		log.info("SQLLite Database File was modified: "+sdf.format(new Date(f.lastModified())));
 	}
 	
 }

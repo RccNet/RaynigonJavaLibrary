@@ -72,7 +72,7 @@ public class MySqlDatabase extends SqlDatabase{
 					}
 				}
 			}, 1000, 15000);
-			logInfo("Connected to Database");
+			log.info("Connected to Database");
 		} catch (Exception e) {
 			throw new SQLException("Error while building MySql connection", e);
 		}
@@ -108,7 +108,7 @@ public class MySqlDatabase extends SqlDatabase{
 				conn.close();
 			}
 			connect(address, dbname, username, password, port);
-			logInfo("Reconnected to Database");
+			log.info("Reconnected to Database");
 		} catch (Exception e) {
 			logException(e);
 			if(!reconnect_sheduled){
