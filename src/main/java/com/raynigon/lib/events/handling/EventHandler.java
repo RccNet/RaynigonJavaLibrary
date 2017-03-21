@@ -28,6 +28,9 @@ public @interface EventHandler {
 	 */
 	EventPriority priority() default EventPriority.NEUTREAL;
 	
-	
-	
+	/** Describes a registered Executor, if the executor was not found, 
+	 * the Event will be processed in the normal Queue.
+	 * @return The Id of a registered Executor
+	 * */
+	int executorId() default -1;
 }

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 /**Generated: 09.09.2015 by Simon Schneider
@@ -42,9 +43,13 @@ public class EventManager {
 	 */
 	private Map<EventListener, EventMethod[]> method_map;
 	
-	/**A List of Methods, just all Methods in a List, i don`t know what you expected here...
+	/** A List of Methods, just all Methods in a List, i don`t know what you expected here...
 	 */
 	private List<EventMethod> method_list;
+	
+	/** A Map of Event Executors, all registered Exeutors are saved here
+	 */
+	private Map<Integer, EventExecutor> executor_map;
 	
 	
 	/**Creates a new EventManager Object
@@ -56,6 +61,7 @@ public class EventManager {
 		cached_methods = new HashMap<Class<? extends Event>, List<EventMethod>>();
 		method_list = new LinkedList<EventMethod>();
 		method_map = new HashMap<EventListener, EventMethod[]>();
+		executor_map = new HashMap<>();
 	}
 	
 	/**Fires a Event and call the registered EventListeners in a new Thread
@@ -129,6 +135,44 @@ public class EventManager {
 		}
 	}
 
+	/** Registers an Event Executor,
+	 * which can be used to execute an Event in a special Thread.
+	 * @param id			The id of the EventExecutor
+	 * @param inExecutor	The EventExecutor Object
+	 */
+	public void registerExecutor(int id, EventExecutor inExecutor){
+		synchronized (executor_map) {
+			if(executor_map.containsKey(id))
+				throw new IllegalArgumentException("Executor Id already exists");
+			executor_map.put(id, inExecutor);
+		}
+	}
+	
+	/** Removed an EventExecutor from the registered Event Executors
+	 * @param id	The Id of the EventExecutor which should be unrgistered
+	 */
+	public void unregisterExecutor(int id) {
+		synchronized (executor_map) {
+			executor_map.remove(id);
+		}
+	}
+	
+	/** Removed an EventExecutor from the registered Event Executors
+	 * @param inExecutor	The Event Executor object which was registered
+	 */
+	public void unregisterExecutor(EventExecutor inExecutor){
+		int id = 0;
+		boolean found = false;
+		for(Entry<Integer, EventExecutor> entry : executor_map.entrySet()){
+			if(entry.getValue()==inExecutor){
+				found = true;
+				id = entry.getKey();
+			}
+		}
+		if(!found)
+			return;
+		executor_map.remove(id);
+	}
 	
 	/**Adds a EventMethod to the matching events in the {@link EventManager#cached_methods} 
 	 * @param eventMethod	The {@link EventMethod} which should be added
