@@ -98,24 +98,40 @@ public class EventManager {
 	public synchronized void registerListener(EventListener inEventListener){
 	    if(inEventListener==null)
 	        throw new NullPointerException("The EventListener mustn't be null");
-		List<EventMethod> ev_methods = new LinkedList<EventMethod>();
+		List<EventMethod> eventMethods = new LinkedList<EventMethod>();
 		Method[] methods = inEventListener.getClass().getMethods();
-		EventMethod evm = null;
 		for(Method method : methods){
-			EventHandler ev = method.getAnnotation(EventHandler.class);
-			Class<?>[] params = method.getParameterTypes();
-			if(params.length==1 && ev!=null){
-				if(Event.class.isAssignableFrom(params[0])){
-					Class<? extends Event> param = params[0].asSubclass(Event.class);
-					evm = new EventMethod(inEventListener, method, ev, param);
-					addEventMethod(evm);
-					ev_methods.add(evm);
-				}
+			EventMethod em = createEventMethod(inEventListener, method);
+			if(em==null)
+				continue;
+			eventMethods.add(em);
+		}
+		EventMethod[] evms = new EventMethod[eventMethods.size()];
+		evms = eventMethods.toArray(evms);
+		method_map.put(inEventListener, evms);
+	}
+
+	/** Internal Method for Processing Event Methods
+	 * @param inEventListener	The Event Listener for which the Method should be processed 
+	 * @param method			The Method which should be processed
+	 * @return					The created EventMethod, or null if no Event Method was created
+	 */
+	private EventMethod createEventMethod(EventListener inEventListener, Method method) {
+		EventHandler ev = method.getAnnotation(EventHandler.class);
+		EventExecutor executor = null;
+		if(ev.executorId()!=-1)
+			executor = executor_map.get(ev.executorId());
+		//TODO see if its needed to log an error here, when no executor was found
+		Class<?>[] params = method.getParameterTypes();
+		if(params.length==1 && ev!=null){
+			if(Event.class.isAssignableFrom(params[0])){
+				Class<? extends Event> param = params[0].asSubclass(Event.class);
+				EventMethod evm = new EventMethod(inEventListener, method, ev, param, executor);
+				addEventMethod(evm);
+				return evm;
 			}
 		}
-		EventMethod[] evms = new EventMethod[ev_methods.size()];
-		evms = ev_methods.toArray(evms);
-		method_map.put(inEventListener, evms);
+		return null;
 	}
 	
 	/**Removes all Methods of this EventListener from this EventManager

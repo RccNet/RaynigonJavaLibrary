@@ -13,19 +13,22 @@ public final class EventMethod {
 	private Method call_method;
 	private EventHandler eventHandler;
 	private Class<? extends Event> parameter_class;
+	private EventExecutor executor;
 	
 	/**Creates an new EventMethod
 	 * @param inCallObject
 	 * @param inCallMethod
 	 * @param inEventHandler
 	 * @param inParameterClass
+	 * @param inExecutor
 	 */
 	protected EventMethod(EventListener inCallObject, Method inCallMethod, 
-			EventHandler inEventHandler, Class<? extends Event> inParameterClass) {
+			EventHandler inEventHandler, Class<? extends Event> inParameterClass, EventExecutor inExecutor) {
 		call_object = inCallObject;
 		call_method = inCallMethod;
 		eventHandler = inEventHandler;
 		parameter_class = inParameterClass;
+		executor = inExecutor;
 	}
 	
 	
@@ -33,7 +36,16 @@ public final class EventMethod {
 	 * @param event	The Event which should be passed as the parameter
 	 * @return true if the method call was a success, false if an error occured
 	 */
-	protected boolean callMethod(Event event){
+	protected boolean callMethod(final Event event){
+		if(executor!=null){
+			executor.execute(()->executeMethodCall(event));
+			return true;
+		}
+		return executeMethodCall(event);
+	}
+
+
+	private boolean executeMethodCall(Event event) {
 		boolean ret = false;
 		try{
 			call_method.invoke(call_object, event);
