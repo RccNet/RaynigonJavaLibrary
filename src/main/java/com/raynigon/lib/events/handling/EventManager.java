@@ -60,17 +60,29 @@ public class EventManager {
 	/**Fires a Event and call the registered EventListeners in a new Thread
 	 * @param event		The Event which should be fired
 	 */
-	public synchronized void fireEvent(Event event) {
+	public synchronized void fireEvent(final Event event) {
+		if(event==null){
+		    throw new NullPointerException("The Event mustn't be null");
+		}
+		List<EventMethod> ems = getCallingMethods(event);
+		ems.stream().parallel().forEach((EventMethod em)->em.callMethod(event));
+	}
+
+	/**Fires a Event and synchronously calls the registered EventListeners
+	 * @param event		The Event which should be fired
+	 */
+	public synchronized void fireSyncEvent(Event event) {
 		if(event==null){
 		    throw new NullPointerException("The Event mustn't be null");
 		}
 		List<EventMethod> ems = getCallingMethods(event);
 		
-		EventThread evt = new EventThread(event, ems);
-		evt.start();
+		for(EventMethod em : ems){
+			em.callMethod(event);
+		}
 	}
-
-
+	
+	
 	/**Registers a new EventListener, the methods in the EventListener are analyzed,
 	 * every Event receiving Method has to have a {@link EventHandler} Annotation
 	 * otherwise it will not receive a fired Event. All matching methods will be saved
