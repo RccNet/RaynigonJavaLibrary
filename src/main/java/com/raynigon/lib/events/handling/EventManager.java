@@ -1,12 +1,13 @@
 package com.raynigon.lib.events.handling;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**Generated: 09.09.2015 by Simon Schneider
  * Project: KalaidokosmosProtocol
@@ -26,9 +27,9 @@ public class EventManager {
 	class EventMethodComparator implements Comparator<EventMethod>{
 		@Override
 		public int compare(EventMethod arg0, EventMethod arg1) {
-			//arg1 first => low to high sorting
-			//arg0 first => high to low sorting
-			//Change Javadoc if args were changed
+			// arg1 first => low to high sorting
+			// arg0 first => high to low sorting
+			// Change Javadoc if args were changed
 			return arg1.getPriority().compare(arg0.getPriority());
 		}	
 	}
@@ -148,18 +149,52 @@ public class EventManager {
 	 */
 	private List<EventMethod> getCallingMethods(Event event){
 		Class<? extends Event> calling_class = event.getClass();
-		if(cached_methods.containsKey(calling_class)){
-			return cached_methods.get(calling_class);
-		}
-		List<EventMethod> cacheList = new LinkedList<EventMethod>();
-		for(EventMethod method : method_list){
-			if(method.getParameterClass().isAssignableFrom(event.getClass())){
-				cacheList.add(method);
-			}
-		}
-		Collections.sort(cacheList, new EventMethodComparator());
+		boolean contentBased = event instanceof ContentBasedEvent;
+		int contendId = -1;
+		if(contentBased)
+			contendId = ((ContentBasedEvent) event).getContentId();
+		if(cached_methods.containsKey(calling_class))
+			return getCachedMethods(calling_class, contentBased, contendId);
+		return resolveCallingMethod(calling_class, contentBased, contendId);
+	}
+
+	/** Resolves all Event Methods which should be called for the Combination of EventClass and ContentId
+	 * @param calling_class		The Class of the Event which should be processed
+	 * @param contentBased		Flag which states if is its a content based Event
+	 * @param contendId			The Content Id of the processed Event
+	 * @return	list of Event Methods which match the given Event and ContentId
+	 */
+	private List<EventMethod> resolveCallingMethod(Class<? extends Event> calling_class, boolean contentBased, int contendId) {
+		Stream<EventMethod> stream = method_list.stream().parallel();
+		stream = stream.filter((EventMethod em)->em.getParameterClass().isAssignableFrom(calling_class));
+		stream = stream.sorted(new EventMethodComparator());
+		List<EventMethod> cacheList = Arrays.asList((EventMethod[]) stream.toArray());
 		cached_methods.put(calling_class, cacheList);
+		if(contentBased){
+			stream = cacheList.stream();
+			stream = stream.filter((EventMethod method)->method.getContentId() == contendId);
+			return Arrays.asList((EventMethod[])stream.toArray());
+		}
 		return cacheList;
+	}
+
+	/** Returns a list of Event Methods filtered by Content Id.
+	 * @param calling_class		The Class of the processed Event
+	 * @param contentBased		Flag which states if is its a content based Event
+	 * @param contendId			The Content Id of the processed Event
+	 * @return	list of Event Methods which match the given Event and ContentId
+	 * @throws {@link NullPointerException} thrown if no Event Method was found in the cached Methods Map
+	 */
+	private List<EventMethod> getCachedMethods(Class<? extends Event> calling_class, boolean contentBased, final int contendId) {
+		List<EventMethod> methods = cached_methods.get(calling_class);
+		if(methods==null)
+			throw new NullPointerException("Cached Methods does not contain a method of the given Event Class");
+		if(contentBased){
+			Stream<EventMethod> stream = methods.stream();
+			stream = stream.filter((EventMethod method)->method.getContentId() == contendId);
+			methods = Arrays.asList((EventMethod[])stream.toArray());
+		}
+		return methods;
 	}
 
 }
