@@ -70,7 +70,21 @@ public class EventManager {
 		evt.start();
 	}
 
-
+	/**Fires a Event and synchronously calls the registered EventListeners
+	 * @param event		The Event which should be fired
+	 */
+	public synchronized void fireSyncEvent(Event event) {
+		if(event==null){
+		    throw new NullPointerException("The Event mustn't be null");
+		}
+		List<EventMethod> ems = getCallingMethods(event);
+		
+		for(EventMethod em : ems){
+			em.callMethod(event);
+		}
+	}
+	
+	
 	/**Registers a new EventListener, the methods in the EventListener are analyzed,
 	 * every Event receiving Method has to have a {@link EventHandler} Annotation
 	 * otherwise it will not receive a fired Event. All matching methods will be saved
