@@ -1,6 +1,7 @@
 package com.raynigon.lib.events.handling;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -150,17 +151,39 @@ public class EventManager {
 	 */
 	private List<EventMethod> getCallingMethods(Event event){
 		Class<? extends Event> calling_class = event.getClass();
-		if(cached_methods.containsKey(calling_class)){
-			return cached_methods.get(calling_class);
-		}
+		boolean contentBased = event instanceof ContentBasedEvent;
+		int contendId = -1;
+		if(contentBased)
+			contendId = ((ContentBasedEvent) event).getContentId();
 		List<EventMethod> cacheList = new LinkedList<EventMethod>();
-		for(EventMethod method : method_list){
-			if(method.getParameterClass().isAssignableFrom(event.getClass())){
-				cacheList.add(method);
+		if(cached_methods.containsKey(calling_class)){
+			if(contentBased){
+				for(EventMethod em : cached_methods.get(calling_class)){
+					if(em.getContentId()!=contendId)
+						continue;
+					cacheList.add(em);
+				}
+			}else{
+				return new ArrayList<>(cached_methods.get(calling_class));
+			}
+		}else{
+			for(EventMethod method : method_list){
+				if(method.getParameterClass().isAssignableFrom(event.getClass())){
+					cacheList.add(method);
+				}
+			}
+			Collections.sort(cacheList, new EventMethodComparator());
+			cached_methods.put(calling_class, cacheList);
+			if(contentBased){
+				List<EventMethod> filteredList = new ArrayList<>();
+				for(EventMethod em : cacheList){
+					if(em.getContentId()!=contendId)
+						continue;
+					cacheList.add(em);
+				}
+				cacheList = filteredList;
 			}
 		}
-		Collections.sort(cacheList, new EventMethodComparator());
-		cached_methods.put(calling_class, cacheList);
 		return cacheList;
 	}
 

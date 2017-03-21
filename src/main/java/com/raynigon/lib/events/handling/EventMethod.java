@@ -60,4 +60,11 @@ public final class EventMethod {
 	protected Class<? extends Event> getParameterClass() {
 		return parameter_class;
 	}
+
+	/**Returns the contentId defined by the methods {@link EventHandler}
+	* @return	the contentId for this method
+	*/
+	public int getContentId() {
+		return eventHandler.contentId();
+	}
 }
