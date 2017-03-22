@@ -179,7 +179,7 @@ public class EventManager {
 				for(EventMethod em : cacheList){
 					if(em.getContentId()!=contendId)
 						continue;
-					cacheList.add(em);
+					filteredList.add(em);
 				}
 				cacheList = filteredList;
 			}
