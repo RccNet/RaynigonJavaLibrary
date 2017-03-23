@@ -1,6 +1,7 @@
 package com.raynigon.lib.events.handling;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -98,8 +99,8 @@ public class EventManager {
 	public synchronized void registerListener(EventListener inEventListener){
 	    if(inEventListener==null)
 	        throw new NullPointerException("The EventListener mustn't be null");
-		List<EventMethod> eventMethods = new LinkedList<EventMethod>();
-		Method[] methods = inEventListener.getClass().getMethods();
+		List<EventMethod> eventMethods = new ArrayList<EventMethod>();
+		List<Method> methods = findMethodsInSuperclasses(inEventListener.getClass());
 		for(Method method : methods){
 			EventMethod em = createEventMethod(inEventListener, method);
 			if(em==null)
@@ -111,6 +112,19 @@ public class EventManager {
 		method_map.put(inEventListener, evms);
 	}
 
+	/** Searches for all Methods which are defined in the base and all its super classes
+	 * @param clazz	The Base Class
+	 * @return a list of all Methods of the specified Classes
+	 */
+	private List<Method> findMethodsInSuperclasses(Class<?> clazz) {
+		List<Method> methods = new ArrayList<>();
+		while(clazz!=null && !clazz.equals(Object.class)){
+			methods.addAll(Arrays.asList(clazz.getMethods()));
+			clazz = clazz.getSuperclass();
+		}
+		return methods;
+	}
+	
 	/** Internal Method for Processing Event Methods
 	 * @param inEventListener	The Event Listener for which the Method should be processed 
 	 * @param method			The Method which should be processed
