@@ -2,6 +2,7 @@ package com.raynigon.lib.events.handling;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -95,7 +96,11 @@ public class EventManager {
 	    if(inEventListener==null)
 	        throw new NullPointerException("The EventListener mustn't be null");
 		List<EventMethod> ev_methods = new LinkedList<EventMethod>();
-		Method[] methods = inEventListener.getClass().getMethods();
+		
+		Class<?> clazz = inEventListener.getClass();
+		
+		List<Method> methods = findMethodsInSuperclasses(clazz);
+		
 		EventMethod evm = null;
 		for(Method method : methods){
 			EventHandler ev = method.getAnnotation(EventHandler.class);
@@ -112,6 +117,19 @@ public class EventManager {
 		EventMethod[] evms = new EventMethod[ev_methods.size()];
 		evms = ev_methods.toArray(evms);
 		method_map.put(inEventListener, evms);
+	}
+
+	/** Searches for all Methods which are defined in the base and all its super classes
+	 * @param clazz	The Base Class
+	 * @return a list of all Methods of the specified Classes
+	 */
+	private List<Method> findMethodsInSuperclasses(Class<?> clazz) {
+		List<Method> methods = new ArrayList<>();
+		while(clazz!=null && !clazz.equals(Object.class)){
+			methods.addAll(Arrays.asList(clazz.getMethods()));
+			clazz = clazz.getSuperclass();
+		}
+		return methods;
 	}
 	
 	/**Removes all Methods of this EventListener from this EventManager
@@ -131,6 +149,7 @@ public class EventManager {
 				methods.remove(em);
 			}
 		}
+		method_map.remove(inEventListener);
 	}
 
 	
