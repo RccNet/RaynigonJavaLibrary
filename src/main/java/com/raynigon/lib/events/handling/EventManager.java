@@ -121,6 +121,8 @@ public class EventManager {
 	    if(inEventListener==null)
             throw new NullPointerException("The EventListener mustn't be null");
 		EventMethod[] ems = method_map.get(inEventListener);
+		if(ems==null)
+			return;
 		List<EventMethod> methods;
 		for(EventMethod em : ems){
 			method_list.remove(em);
@@ -155,7 +157,7 @@ public class EventManager {
 		int contendId = -1;
 		if(contentBased)
 			contendId = ((ContentBasedEvent) event).getContentId();
-		List<EventMethod> cacheList = new LinkedList<EventMethod>();
+		List<EventMethod> cacheList = new ArrayList<EventMethod>();
 		if(cached_methods.containsKey(calling_class)){
 			if(contentBased){
 				for(EventMethod em : cached_methods.get(calling_class)){
