@@ -96,11 +96,7 @@ public class EventManager {
 	    if(inEventListener==null)
 	        throw new NullPointerException("The EventListener mustn't be null");
 		List<EventMethod> ev_methods = new LinkedList<EventMethod>();
-		
-		Class<?> clazz = inEventListener.getClass();
-		
-		List<Method> methods = findMethodsInSuperclasses(clazz);
-		
+		List<Method> methods = findMethodsInSuperclasses(inEventListener.getClass());
 		EventMethod evm = null;
 		for(Method method : methods){
 			EventHandler ev = method.getAnnotation(EventHandler.class);
