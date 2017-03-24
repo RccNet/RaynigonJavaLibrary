@@ -100,11 +100,12 @@ public class EventManager {
 		EventMethod evm = null;
 		for(Method method : methods){
 			EventHandler ev = method.getAnnotation(EventHandler.class);
+			ContentEventHandler cev = method.getAnnotation(ContentEventHandler.class);
 			Class<?>[] params = method.getParameterTypes();
 			if(params.length==1 && ev!=null){
 				if(Event.class.isAssignableFrom(params[0])){
 					Class<? extends Event> param = params[0].asSubclass(Event.class);
-					evm = new EventMethod(inEventListener, method, ev, param);
+					evm = new EventMethod(inEventListener, method,  param, ev, cev);
 					addEventMethod(evm);
 					ev_methods.add(evm);
 				}
@@ -176,7 +177,7 @@ public class EventManager {
 		if(cached_methods.containsKey(calling_class)){
 			if(contentBased){
 				for(EventMethod em : cached_methods.get(calling_class)){
-					if(em.getContentId()!=contendId)
+					if(em.hasContentId() && em.getContentId()!=contendId)
 						continue;
 					cacheList.add(em);
 				}
@@ -194,7 +195,7 @@ public class EventManager {
 			if(contentBased){
 				List<EventMethod> filteredList = new ArrayList<>();
 				for(EventMethod em : cacheList){
-					if(em.getContentId()!=contendId)
+					if(em.hasContentId() && em.getContentId()!=contendId)
 						continue;
 					filteredList.add(em);
 				}

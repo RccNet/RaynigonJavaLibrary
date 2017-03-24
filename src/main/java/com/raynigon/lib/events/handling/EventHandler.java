@@ -13,14 +13,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface EventHandler {
-
-	/**The {@link EventHandler#contentId()} described the content of an called Event,
-	 * if the EventContentId and this content id matches, the method will be called.
-	 * This will only wok for {@link ContentBasedEvent}s. Usually this method will be called
-	 * without checking the content id
-	 * @return	the content id of the listening Event 
-	 */
-	int contentId() default -1;
 	
 	/**This priority defines in which order the listeners will be called.
 	 * High priorities at the end, low priorities at first

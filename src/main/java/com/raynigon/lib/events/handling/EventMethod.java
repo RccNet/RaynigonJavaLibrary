@@ -12,6 +12,7 @@ public final class EventMethod {
 	private EventListener call_object;
 	private Method call_method;
 	private EventHandler eventHandler;
+	private ContentEventHandler contentEventHandler;
 	private Class<? extends Event> parameter_class;
 	
 	/**Creates an new EventMethod
@@ -20,12 +21,29 @@ public final class EventMethod {
 	 * @param inEventHandler
 	 * @param inParameterClass
 	 */
-	protected EventMethod(EventListener inCallObject, Method inCallMethod, 
-			EventHandler inEventHandler, Class<? extends Event> inParameterClass) {
+	protected EventMethod(EventListener inCallObject, Method inCallMethod,
+			Class<? extends Event> inParameterClass, 
+			EventHandler inEventHandler) {
+		this(inCallObject, inCallMethod, inParameterClass, inEventHandler, null);
+	}
+	
+	
+	/**Creates an new EventMethod
+	 * @param inCallObject
+	 * @param inCallMethod
+	 * @param inParameterClass
+	 * @param inEventHandler
+	 * @param inContentEventHandler
+	 */
+	protected EventMethod(EventListener inCallObject, Method inCallMethod,
+			Class<? extends Event> inParameterClass, 
+			EventHandler inEventHandler, 
+			ContentEventHandler inContentEventHandler) {
 		call_object = inCallObject;
 		call_method = inCallMethod;
-		eventHandler = inEventHandler;
 		parameter_class = inParameterClass;
+		eventHandler = inEventHandler;
+		contentEventHandler = inContentEventHandler;
 	}
 	
 	
@@ -61,10 +79,17 @@ public final class EventMethod {
 		return parameter_class;
 	}
 
+	/**Returns if a content Id exists
+	* @return	the contentId for this method
+	*/
+	public boolean hasContentId() {
+		return contentEventHandler!=null;
+	}
+	
 	/**Returns the contentId defined by the methods {@link EventHandler}
 	* @return	the contentId for this method
 	*/
 	public int getContentId() {
-		return eventHandler.contentId();
+		return contentEventHandler!=null ? contentEventHandler.contentId() : 0;
 	}
 }
