@@ -11,25 +11,59 @@ public final class EventMethod {
 
 	private EventListener call_object;
 	private Method call_method;
-	private EventHandler eventHandler;
 	private Class<? extends Event> parameter_class;
+	private EventHandler eventHandler;
+	private ContentEventHandler contentEventHandler;
 	private EventExecutor executor;
 	
-	/**Creates an new EventMethod
+	
+	/**
 	 * @param inCallObject
 	 * @param inCallMethod
-	 * @param inEventHandler
 	 * @param inParameterClass
+	 * @param inEventHandler
+	 * @param inContentEventHandler
 	 * @param inExecutor
 	 */
 	protected EventMethod(EventListener inCallObject, Method inCallMethod, 
-			EventHandler inEventHandler, Class<? extends Event> inParameterClass, EventExecutor inExecutor) {
+			Class<? extends Event> inParameterClass, 
+			EventHandler inEventHandler, ContentEventHandler inContentEventHandler, 
+			EventExecutor inExecutor) {
 		call_object = inCallObject;
 		call_method = inCallMethod;
-		eventHandler = inEventHandler;
 		parameter_class = inParameterClass;
+	    eventHandler = inEventHandler;
+	    contentEventHandler = inContentEventHandler;
 		executor = inExecutor;
 	}
+	
+	   /**
+     * @param inCallObject
+     * @param inCallMethod
+     * @param inParameterClass
+     * @param inEventHandler
+     * @param inContentEventHandler
+     * @param inExecutor
+     */
+    protected EventMethod(EventListener inCallObject, Method inCallMethod, 
+            Class<? extends Event> inParameterClass, 
+            EventHandler inEventHandler, EventExecutor inExecutor) {
+        this(inCallObject, inCallMethod, inParameterClass, inEventHandler, null, inExecutor);
+    }
+    
+    /**
+     * @param inCallObject
+     * @param inCallMethod
+     * @param inParameterClass
+     * @param inEventHandler
+     * @param inContentEventHandler
+     * @param inExecutor
+     */
+    protected EventMethod(EventListener inCallObject, Method inCallMethod, 
+            Class<? extends Event> inParameterClass, 
+            EventHandler inEventHandler, ContentEventHandler inContentEventHandler) {
+        this(inCallObject, inCallMethod, inParameterClass, inEventHandler, inContentEventHandler, null);
+    }
 	
 	
 	/**Calls the referenced Method
@@ -73,10 +107,17 @@ public final class EventMethod {
 		return parameter_class;
 	}
 
-	/**Returns the contentId defined by the methods {@link EventHandler}
-	 * @return	the contentId for this method
-	 */
-	protected int getContentId() {
-		return eventHandler.contentId();
-	}
+	/**Returns if a content Id exists
+	    * @return   the contentId for this method
+	    */
+	    public boolean hasContentId() {
+	        return contentEventHandler!=null;
+	    }
+	    
+	    /**Returns the contentId defined by the methods {@link EventHandler}
+	    * @return   the contentId for this method
+	    */
+	    public int getContentId() {
+	        return contentEventHandler!=null ? contentEventHandler.contentId() : 0;
+	    }
 }

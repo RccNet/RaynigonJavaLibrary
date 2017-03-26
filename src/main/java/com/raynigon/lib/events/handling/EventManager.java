@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**Generated: 09.09.2015 by Simon Schneider
@@ -132,6 +133,9 @@ public class EventManager {
 	 */
 	private EventMethod createEventMethod(EventListener inEventListener, Method method) {
 		EventHandler ev = method.getAnnotation(EventHandler.class);
+		ContentEventHandler cev = method.getAnnotation(ContentEventHandler.class);
+		if(ev==null)
+		    return null;
 		EventExecutor executor = null;
 		if(ev.executorId()!=-1)
 			executor = executor_map.get(ev.executorId());
@@ -140,7 +144,7 @@ public class EventManager {
 		if(params.length==1 && ev!=null){
 			if(Event.class.isAssignableFrom(params[0])){
 				Class<? extends Event> param = params[0].asSubclass(Event.class);
-				EventMethod evm = new EventMethod(inEventListener, method, ev, param, executor);
+				EventMethod evm = new EventMethod(inEventListener, method, param, ev, cev, executor);
 				addEventMethod(evm);
 				return evm;
 			}
@@ -242,17 +246,17 @@ public class EventManager {
 		Stream<EventMethod> stream = method_list.stream().parallel();
 		stream = stream.filter((EventMethod em)->em.getParameterClass().isAssignableFrom(calling_class));
 		stream = stream.sorted(new EventMethodComparator());
-		List<EventMethod> cacheList = Arrays.asList((EventMethod[]) stream.toArray());
+		List<EventMethod> cacheList = stream.collect(Collectors.toList());
 		cached_methods.put(calling_class, cacheList);
 		if(contentBased){
 			stream = cacheList.stream();
-			stream = stream.filter((EventMethod method)->method.getContentId() == contendId);
-			return Arrays.asList((EventMethod[])stream.toArray());
+			stream = stream.filter((EventMethod method)->checkContentId(method,contendId));
+			return stream.collect(Collectors.toList());
 		}
 		return cacheList;
 	}
 
-	/** Returns a list of Event Methods filtered by Content Id.
+    /** Returns a list of Event Methods filtered by Content Id.
 	 * @param calling_class		The Class of the processed Event
 	 * @param contentBased		Flag which states if is its a content based Event
 	 * @param contendId			The Content Id of the processed Event
@@ -265,10 +269,24 @@ public class EventManager {
 			throw new NullPointerException("Cached Methods does not contain a method of the given Event Class");
 		if(contentBased){
 			Stream<EventMethod> stream = methods.stream();
-			stream = stream.filter((EventMethod method)->method.getContentId() == contendId);
-			methods = Arrays.asList((EventMethod[])stream.toArray());
+			stream = stream.filter((EventMethod method)->checkContentId(method, contendId));
+			methods = stream.collect(Collectors.toList());
 		}
 		return methods;
 	}
+	
+	/**Checks if the given Method has a content id, 
+     * if true, it checks if the given contentId and the content id of the given method are the same.
+     * if the method does not have a content id it returns true
+     * @param method       The method which should be checked
+     * @param contendId    The content id against the method should be checked
+     * @return true if the content if matches or the method does not have a content id, 
+     * false if the method has a content id and it does not match with the given content id
+     */
+    private boolean checkContentId(EventMethod method, int contendId){
+        if(!method.hasContentId())
+            return true;
+        return method.getContentId()==contendId;
+    }
 
 }
