@@ -56,6 +56,8 @@ public final class ZipCompressor implements Compressor {
             if(ze.isDirectory()){
                 destFile.mkdirs();
             }else{
+            	if(!destFile.getParentFile().exists())
+            		destFile.getParentFile().mkdirs();
             	destFile.createNewFile();
                 FileOutputStream fos = new FileOutputStream(destFile);
                 IOUtils.copy(zis, fos);
